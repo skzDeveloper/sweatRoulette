@@ -16,6 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        // Override point for customization after application launch.
+        //let initialViewController = WorkoutSelectorVC()
+        let containerViewController = ContainerViewController()
+        
+        application.statusBarStyle = .LightContent
+        
+        //Set up the Window Properties
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window!.rootViewController = containerViewController
+        self.window!.backgroundColor = UIColor(colorLiteralRed: 0.00, green: 0.20, blue: 0.20, alpha: 1.0)
+        //self.window!.rootViewController = UINavigationController(rootViewController: initialViewController)
+        self.window!.makeKeyAndVisible()
         return true
     }
 
