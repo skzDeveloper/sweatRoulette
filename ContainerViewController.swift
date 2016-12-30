@@ -22,11 +22,11 @@ class ContainerViewController: UIViewController {
     }
     
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: viewDidLoad                                                                                                          //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: viewDidLoad                                                                                                 //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func viewDidLoad() {
         print("ViewDidLoad")
         super.viewDidLoad()
@@ -58,11 +58,11 @@ class ContainerViewController: UIViewController {
         centerNavigationController.view.addGestureRecognizer(panGestureRecognizer)
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: pushArchiveView                                                                                                      //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: pushArchiveView                                                                                             //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func pushArchiveView() {
         //
         if centerNavigationController.topViewController !== archiveViewController {
@@ -77,11 +77,11 @@ class ContainerViewController: UIViewController {
         }
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: pushSelectorView                                                                                                     //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: pushSelectorView                                                                                            //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func pushSelectorView() {
         if centerNavigationController.topViewController !== centerViewController {
             print("The top VC is not the same take action")
@@ -97,11 +97,11 @@ class ContainerViewController: UIViewController {
 
 // MARK: CenterViewController delegate
 extension ContainerViewController: WorkoutSelectorVCDelegate {
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: toggleLeftPanel                                                                                                      //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: toggleLeftPanel                                                                                             //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func toggleLeftPanel() {
         let notAlreadyExpanded = (currentState != .LeftPanelExpanded)
         
@@ -112,11 +112,11 @@ extension ContainerViewController: WorkoutSelectorVCDelegate {
         animateLeftPanel(shouldExpand: notAlreadyExpanded)
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: addLeftPanelViewController                                                                                           //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: addLeftPanelViewController                                                                                  //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func addLeftPanelViewController() {
         if (leftViewController == nil) {
             leftViewController = SidePanelViewController(container: self)
@@ -125,11 +125,11 @@ extension ContainerViewController: WorkoutSelectorVCDelegate {
         }
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: addChildSidePanelController                                                                                          //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: addChildSidePanelController                                                                                 //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func addChildSidePanelController(sidePanelController: SidePanelViewController) {
         view.insertSubview(sidePanelController.view, atIndex: 0)
         
@@ -137,11 +137,11 @@ extension ContainerViewController: WorkoutSelectorVCDelegate {
         sidePanelController.didMoveToParentViewController(self)
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: animateLeftPanel                                                                                                     //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: animateLeftPanel                                                                                            //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func animateLeftPanel(shouldExpand shouldExpand: Bool) {
         if (shouldExpand) {
             currentState = .LeftPanelExpanded
@@ -157,22 +157,22 @@ extension ContainerViewController: WorkoutSelectorVCDelegate {
         }
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: animateCenterPanelXPosition                                                                                          //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: animateCenterPanelXPosition                                                                                 //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func animateCenterPanelXPosition(targetPosition targetPosition: CGFloat, completion: ((Bool) -> Void)! = nil) {
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
             self.centerNavigationController.view.frame.origin.x = targetPosition
             }, completion: completion)
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: showShadowForCenterViewController                                                                                    //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: showShadowForCenterViewController                                                                           //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func showShadowForCenterViewController(shouldShowShadow: Bool) {
         if (shouldShowShadow) {
             centerNavigationController.view.layer.shadowOpacity = 0.8
@@ -185,11 +185,11 @@ extension ContainerViewController: WorkoutSelectorVCDelegate {
 
 // MARK: Gesture recognizer
 extension ContainerViewController: UIGestureRecognizerDelegate {
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: handlePanGesture                                                                                                     //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: handlePanGesture                                                                                            //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func handlePanGesture(recognizer: UIPanGestureRecognizer) {
         
         let gestureIsDraggingFromLeftToRight = (recognizer.velocityInView(view).x > 0)
