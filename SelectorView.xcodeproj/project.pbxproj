@@ -26,6 +26,7 @@
 		1F9577DE1D14886D00525C51 /* OptionCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9577DD1D14886D00525C51 /* OptionCollectionVC.swift */; };
 		1F9577E01D14923F00525C51 /* WorkoutOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9577DF1D14923F00525C51 /* WorkoutOptionCell.swift */; };
 		1F9577E21D1901D500525C51 /* WorkoutSaveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9577E11D1901D500525C51 /* WorkoutSaveVC.swift */; };
+		E3FE98CC1E52CC2A00E843C4 /* ExerciseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E3FE98CB1E52CC2A00E843C4 /* ExerciseCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		1F9577DD1D14886D00525C51 /* OptionCollectionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionCollectionVC.swift; sourceTree = "<group>"; };
 		1F9577DF1D14923F00525C51 /* WorkoutOptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutOptionCell.swift; sourceTree = "<group>"; };
 		1F9577E11D1901D500525C51 /* WorkoutSaveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutSaveVC.swift; sourceTree = "<group>"; };
+		E3FE98CB1E52CC2A00E843C4 /* ExerciseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExerciseCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +141,7 @@
 				1F7A2B331CEAFA2600095F72 /* Assets.xcassets */,
 				1F7A2B351CEAFA2600095F72 /* LaunchScreen.storyboard */,
 				1F7A2B381CEAFA2600095F72 /* Info.plist */,
+				E3FE98CB1E52CC2A00E843C4 /* ExerciseCell.xib */,
 			);
 			path = SelectorView;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F7A2B371CEAFA2600095F72 /* LaunchScreen.storyboard in Resources */,
+				E3FE98CC1E52CC2A00E843C4 /* ExerciseCell.xib in Resources */,
 				1F7A2B341CEAFA2600095F72 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

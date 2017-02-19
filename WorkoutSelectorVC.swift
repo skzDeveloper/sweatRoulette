@@ -1,10 +1,10 @@
-//
-//  WorkoutSelectorVC.swift
-//  SelectorView
-//
-//  Created by Saad Omar on 5/17/16.
-//  Copyright © 2016 Saad Omar. All rights reserved.
-//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  WorkoutSelectorVC.swift                                                                                                    //
+//  SelectorView                                                                                                               //
+//                                                                                                                             //
+//  Created by Saad Omar on 5/17/16.                                                                                           //
+//  Copyright © 2016 Saad Omar. All rights reserved.                                                                           //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import UIKit
 
@@ -16,6 +16,12 @@ protocol WorkoutSelectorVCDelegate {
 class WorkoutSelectorVC: UIViewController {
     
     var button: UIButton!
+    
+    //TODO: Integrate this
+    var muscleGroupSelection: Int? = nil
+    var styleSelection      : Int? = nil
+    var difficultySelection : Int? = nil
+    
     var delegate: WorkoutSelectorVCDelegate?
     var request : WorkoutRequestVC?
     
@@ -24,57 +30,57 @@ class WorkoutSelectorVC: UIViewController {
     var levelOptionController: WorkoutOptionVC!
     
     let muscleGroupOptions: [WorkoutOptionData]  = [
-        WorkoutOptionData(label: "Quads"       , param: "quads"),
-        WorkoutOptionData(label: "Shoulders"   , param: "shoulders"),
-        WorkoutOptionData(label: "Traps"       , param: "traps"),
-        WorkoutOptionData(label: "Triceps"     , param: "triceps"),
-        WorkoutOptionData(label: "Abs"         , param: "abs"),
-        WorkoutOptionData(label: "Back"        , param: "back"),
-        WorkoutOptionData(label: "Biceps"      , param: "biceps"),
-        WorkoutOptionData(label: "Calves"      , param: "calves"),
-        WorkoutOptionData(label: "Chest"       , param: "chest"),
-        WorkoutOptionData(label: "Forearms"    , param: "forearms"),
-        WorkoutOptionData(label: "Glutes"      , param: "glutes"),
-        WorkoutOptionData(label: "Hamstrings"  , param: "hamstrings"),
-        WorkoutOptionData(label: "Lats"        , param: "lats"),
-        WorkoutOptionData(label: "Quads"       , param: "quads"),
-        WorkoutOptionData(label: "Shoulders"   , param: "shoulders"),
-        WorkoutOptionData(label: "Traps"       , param: "traps"),
-        WorkoutOptionData(label: "Triceps"     , param: "triceps"),
-        WorkoutOptionData(label: "Abs"         , param: "abs"),
-        WorkoutOptionData(label: "Back"        , param: "back"),
-        WorkoutOptionData(label: "Biceps"      , param: "biceps"),
-        WorkoutOptionData(label: "Calves"      , param: "calves")]
+        WorkoutOptionData(label: "Quads"       , param: "quads",       selected:false),
+        WorkoutOptionData(label: "Shoulders"   , param: "shoulders",   selected:false),
+        WorkoutOptionData(label: "Traps"       , param: "traps",       selected:false),
+        WorkoutOptionData(label: "Triceps"     , param: "triceps",     selected:false),
+        WorkoutOptionData(label: "Abs"         , param: "abs",         selected:false),
+        WorkoutOptionData(label: "Back"        , param: "back",        selected:false),
+        WorkoutOptionData(label: "Biceps"      , param: "biceps",      selected:false),
+        WorkoutOptionData(label: "Calves"      , param: "calves",      selected:false),
+        WorkoutOptionData(label: "Chest"       , param: "chest",       selected:false),
+        WorkoutOptionData(label: "Forearms"    , param: "forearms",    selected:false),
+        WorkoutOptionData(label: "Glutes"      , param: "glutes",      selected:false),
+        WorkoutOptionData(label: "Hamstrings"  , param: "hamstrings",  selected:false),
+        WorkoutOptionData(label: "Lats"        , param: "lats",        selected:false),
+        WorkoutOptionData(label: "Quads"       , param: "quads",       selected:false),
+        WorkoutOptionData(label: "Shoulders"   , param: "shoulders",   selected:false),
+        WorkoutOptionData(label: "Traps"       , param: "traps",       selected:false),
+        WorkoutOptionData(label: "Triceps"     , param: "triceps",     selected:false),
+        WorkoutOptionData(label: "Abs"         , param: "abs",         selected:false),
+        WorkoutOptionData(label: "Back"        , param: "back",        selected:false),
+        WorkoutOptionData(label: "Biceps"      , param: "biceps",      selected:false),
+        WorkoutOptionData(label: "Calves"      , param: "calves",      selected:false)]
     
     let workoutStyleOptions: [WorkoutOptionData] = [
-        WorkoutOptionData(label: "Olympic"     , param: "olympic"),
-        WorkoutOptionData(label: "Polymetrics" , param: "polymetrics"),
-        WorkoutOptionData(label: "Strength"    , param: "strength"),
-        WorkoutOptionData(label: "Stretching"  , param: "streching"),
-        WorkoutOptionData(label: "BodyOnly"    , param: "body_only"),
-        WorkoutOptionData(label: "CrossFit"    , param: "crossfit"),
-        WorkoutOptionData(label: "Olympic"     , param: "olympic"),
-        WorkoutOptionData(label: "Polymetrics" , param: "polymetrics"),
-        WorkoutOptionData(label: "Strength"    , param: "strength"),
-        WorkoutOptionData(label: "Stretching"  , param: "streching"),
-        WorkoutOptionData(label: "BodyOnly"    , param: "body_only"),
-        WorkoutOptionData(label: "CrossFit"    , param: "crossfit"),
-        WorkoutOptionData(label: "Olympic"     , param: "olympic"),
-        WorkoutOptionData(label: "Polymetrics" , param: "polymetrics")]
+        WorkoutOptionData(label: "Olympic"     , param: "olympic",     selected:false),
+        WorkoutOptionData(label: "Polymetrics" , param: "polymetrics", selected:false),
+        WorkoutOptionData(label: "Strength"    , param: "strength",    selected:false),
+        WorkoutOptionData(label: "Stretching"  , param: "streching",   selected:false),
+        WorkoutOptionData(label: "BodyOnly"    , param: "body_only",   selected:false),
+        WorkoutOptionData(label: "CrossFit"    , param: "crossfit",    selected:false),
+        WorkoutOptionData(label: "Olympic"     , param: "olympic",     selected:false),
+        WorkoutOptionData(label: "Polymetrics" , param: "polymetrics", selected:false),
+        WorkoutOptionData(label: "Strength"    , param: "strength",    selected:false),
+        WorkoutOptionData(label: "Stretching"  , param: "streching",   selected:false),
+        WorkoutOptionData(label: "BodyOnly"    , param: "body_only",   selected:false),
+        WorkoutOptionData(label: "CrossFit"    , param: "crossfit",    selected:false),
+        WorkoutOptionData(label: "Olympic"     , param: "olympic",     selected:false),
+        WorkoutOptionData(label: "Polymetrics" , param: "polymetrics", selected:false)]
     
     let difficultyOptions: [WorkoutOptionData]   = [
-        WorkoutOptionData(label: "Beginner"    , param: "beginner"),
-        WorkoutOptionData(label: "Intermediate", param: "intermediate"),
-        WorkoutOptionData(label: "Advanced"    , param: "advanced"),
-        WorkoutOptionData(label: "Expert"      , param: "expert"),
-        WorkoutOptionData(label: "Beginner"    , param: "beginner"),
-        WorkoutOptionData(label: "Intermediate", param: "intermediate"),
-        WorkoutOptionData(label: "Advanced"    , param: "advanced"),
-        WorkoutOptionData(label: "Expert"      , param: "expert"),
-        WorkoutOptionData(label: "Beginner"    , param: "beginner"),
-        WorkoutOptionData(label: "Intermediate", param: "intermediate"),
-        WorkoutOptionData(label: "Advanced"    , param: "advanced"),
-        WorkoutOptionData(label: "Expert"      , param: "expert")]
+        WorkoutOptionData(label: "Beginner"    , param: "beginner",    selected:false),
+        WorkoutOptionData(label: "Intermediate", param: "intermediate",selected:false),
+        WorkoutOptionData(label: "Advanced"    , param: "advanced",    selected:false),
+        WorkoutOptionData(label: "Expert"      , param: "expert",      selected:false),
+        WorkoutOptionData(label: "Beginner"    , param: "beginner",    selected:false),
+        WorkoutOptionData(label: "Intermediate", param: "intermediate",selected:false),
+        WorkoutOptionData(label: "Advanced"    , param: "advanced",    selected:false),
+        WorkoutOptionData(label: "Expert"      , param: "expert",      selected:false),
+        WorkoutOptionData(label: "Beginner"    , param: "beginner",    selected:false),
+        WorkoutOptionData(label: "Intermediate", param: "intermediate",selected:false),
+        WorkoutOptionData(label: "Advanced"    , param: "advanced",    selected:false),
+        WorkoutOptionData(label: "Expert"      , param: "expert",      selected:false)]
     
     // MARK: - UI Configuration
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +145,11 @@ class WorkoutSelectorVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let d = ["b":button, "m":muscleOptionControler.view, "s":styleOptionControler.view, "l":levelOptionController.view,"foo":view]
+        let d = ["b":button,
+                 "m":muscleOptionControler.view,
+                 "s":styleOptionControler.view,
+                 "l":levelOptionController.view,
+                 "foo":view]
         
         // Set Auto Resizing Masks
         button.translatesAutoresizingMaskIntoConstraints                     = false
@@ -148,18 +158,52 @@ class WorkoutSelectorVC: UIViewController {
         levelOptionController.view.translatesAutoresizingMaskIntoConstraints = false
 
         // Add Vertical Constraints
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[m][s][l][b]|",options: NSLayoutFormatOptions.DirectionLeftToRight,metrics: nil, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[m][s][l][b]|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
         
         // Add Horizontal Constraints
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[b]|" ,options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[m]|", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[s]|", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[l]|", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[b]|" ,
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[m]|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[s]|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[l]|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
+    
+        //TODO: Need to incorporate this
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "refreshMuscleOption:",
+            name:"refresh",
+            object: self.muscleOptionControler.collectionOption)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "refreshStyleOption:",
+            name:"refresh",
+            object: self.styleOptionControler.collectionOption)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "refreshDifficultyOption:",
+            name:"refresh",
+            object: self.levelOptionController.collectionOption)
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
-    // Function: viewWillLayoutSubviews                                                                                      //
+    // Function: : viewWillLayoutSubviews                                                                                    //
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func viewWillLayoutSubviews() {
@@ -170,8 +214,13 @@ class WorkoutSelectorVC: UIViewController {
         //print("view height: \(VIEW_HEIGHT)  option height:\(OPTION_HEIGHT) button height: \(BUTTON_HEIGHT)")
     
     
-        let d = ["b":button, "mo":muscleOptionControler.view, "so":styleOptionControler.view, "lo":levelOptionController.view,"foo":view]
-        let m = ["bh": BUTTON_HEIGHT, "oh": OPTION_HEIGHT]
+        let d = ["b":button,
+                 "mo":muscleOptionControler.view,
+                 "so":styleOptionControler.view,
+                 "lo":levelOptionController.view,"foo":view]
+        
+        let m = ["bh": BUTTON_HEIGHT,
+                 "oh": OPTION_HEIGHT]
     
         // Set Button Constraints
         button.translatesAutoresizingMaskIntoConstraints                     = false
@@ -180,21 +229,167 @@ class WorkoutSelectorVC: UIViewController {
         levelOptionController.view.translatesAutoresizingMaskIntoConstraints = false
     
         // Set the heights of the button and the three Workout Option Views
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[b(==bh)]" , options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[mo(==oh)]", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[so(==oh)]", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[lo(==oh)]", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[b(==bh)]" ,
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: m,
+            views: d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[mo(==oh)]",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: m,
+            views: d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[so(==oh)]",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: m,
+            views: d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[lo(==oh)]",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: m,
+            views: d))
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
-    // Function: buttonPressed                                                                                               //
+    // Function: WorkoutSelectorVC: buttonPressed                                                                            //
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func buttonPressed(sender: UIButton) {
         //print("request button pressed")
         self.navigationController?.pushViewController(request!, animated: true)
+    
+    
+//    func buttonPressed(sender: UIButton)
+//    {
+//        
+//        if sender.titleForState(.Normal) == "SPIN"
+//        {
+//            spinOptions()
+//        }
+//        else
+//        {
+//            if let requestString = buildRequestString()
+//            {
+//                workoutRequest.workoutList = self.workoutList //Probably move this somewhere else where it is called once
+//                workoutRequest.setRequestString(requestString, forSection: muscleGroupOptions[muscleGroupSelection!].optionName)
+//                self.navigationController?.pushViewController(workoutRequest, animated: true)
+//            }
+//        }
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: WorkoutSelectorVC: refreshMuscleOption                                                                      //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func refreshMuscleOption(notification: NSNotification){
+        
+        print("Muscle Observer Notified")
+        if let opt = muscleOptionControler.collectionOption.selectedItem {
+            muscleGroupSelection = opt.item
+            print("The selection is \(muscleGroupOptions[muscleGroupSelection!].paramName)")
+        }
+        else {
+            muscleGroupSelection = nil
+        }
+        
+        refreshButton()
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: WorkoutSelectorVC: refreshStyleOption                                                                       //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func refreshStyleOption(notification: NSNotification) {
+        
+        print("Style Observer Notified")
+        if let opt = styleOptionControler.collectionOption.selectedItem {
+            styleSelection = opt.item
+            print("The selection is \(workoutStyleOptions[styleSelection!].paramName)")
+        }
+        else {
+            styleSelection = nil
+        }
+        
+        refreshButton()
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: WorkoutSelectorVC: refreshStyleOption(notification                                                          //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func refreshDifficultyOption(notification: NSNotification){
+        
+        print("Difficlty Observer Notified")
+        if let opt = levelOptionController.collectionOption.selectedItem {
+            difficultySelection = opt.item
+            print("The selection is \(difficultyOptions[difficultySelection!].paramName)")
+        }
+        else {
+            difficultySelection = nil
+        }
+        
+        refreshButton()
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: WorkoutSelectorVC: refreshButton                                                                            //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func refreshButton() -> Void {
+        // All options are selected
+        if muscleGroupSelection != nil && styleSelection != nil  && difficultySelection != nil {
+            button.setTitle("GET WORKOUT", forState: .Normal)
+        }
+        else {
+            button.setTitle("SPIN", forState: .Normal)
+        }
+        
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: WorkoutSelectorVC: buildRequestString                                                                       //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//    func buildRequestString() -> String?
+//    {
+//        var bodyPartString   : String = ""
+//        var styleString      : String = ""
+//        var difficultyString : String = ""
+//        
+//        if let i = muscleGroupSelection
+//        {
+//            bodyPartString = muscleGroupOptions[i].optionName
+//        }
+//        else
+//        {
+//            return nil
+//        }
+//        if let j = styleSelection
+//        {
+//            styleString = workoutStyleOptions[j].optionName
+//        }
+//        else
+//        {
+//            return nil
+//        }
+//        if let k = difficultySelection
+//        {
+//            difficultyString = DifficultyOptions[k].optionName
+//        }
+//        else
+//        {
+//            return nil
+//        }
+//        
+//        print("Style String = \(styleString)")
+//        return "http://localhost:8080/SweatRouletteJPA/resources/WorkoutResult?bodyPart=\(bodyPartString)&style=strength&intensity=\(difficultyString)"
+//    }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
