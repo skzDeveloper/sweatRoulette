@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  WorkoutSelectorVC.swift                                                                                                    //
-//  SelectorView                                                                                                               //
+//  SelectorView                                                                                                     var       //
 //                                                                                                                             //
 //  Created by Saad Omar on 5/17/16.                                                                                           //
 //  Copyright © 2016 Saad Omar. All rights reserved.                                                                           //
@@ -17,7 +17,6 @@ class WorkoutSelectorVC: UIViewController {
     
     var button: UIButton!
     
-    //TODO: Integrate this
     var muscleGroupSelection: Int? = nil
     var styleSelection      : Int? = nil
     var difficultySelection : Int? = nil
@@ -82,7 +81,7 @@ class WorkoutSelectorVC: UIViewController {
         WorkoutOptionData(label: "Advanced"    , param: "advanced",    selected:false),
         WorkoutOptionData(label: "Expert"      , param: "expert",      selected:false)]
     
-    // MARK: - UI Configuration
+    // MARK: - UIViewController Overrides
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
     // Function: loadView                                                                                                    //
@@ -184,7 +183,6 @@ class WorkoutSelectorVC: UIViewController {
             metrics: nil,
             views: d))
     
-        //TODO: Need to incorporate this
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "refreshMuscleOption:",
             name:"refresh",
@@ -256,26 +254,19 @@ class WorkoutSelectorVC: UIViewController {
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func buttonPressed(sender: UIButton) {
-        //print("request button pressed")
-        self.navigationController?.pushViewController(request!, animated: true)
     
-    
-//    func buttonPressed(sender: UIButton)
-//    {
-//        
-//        if sender.titleForState(.Normal) == "SPIN"
-//        {
-//            spinOptions()
-//        }
-//        else
-//        {
-//            if let requestString = buildRequestString()
-//            {
-//                workoutRequest.workoutList = self.workoutList //Probably move this somewhere else where it is called once
-//                workoutRequest.setRequestString(requestString, forSection: muscleGroupOptions[muscleGroupSelection!].optionName)
-//                self.navigationController?.pushViewController(workoutRequest, animated: true)
-//            }
-//        }
+        // Not all Options are selected
+        if sender.titleForState(.Normal) == "SPIN"
+        {
+            // Need to do the spin animation here
+            // spinOptions()
+        }
+        // All Options are selected
+        else
+        {
+            setRoutineRequestOptions()
+            self.navigationController?.pushViewController(request!, animated: true)
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -285,10 +276,10 @@ class WorkoutSelectorVC: UIViewController {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func refreshMuscleOption(notification: NSNotification){
         
-        print("Muscle Observer Notified")
+        //print("Muscle Observer Notified")
         if let opt = muscleOptionControler.collectionOption.selectedItem {
             muscleGroupSelection = opt.item
-            print("The selection is \(muscleGroupOptions[muscleGroupSelection!].paramName)")
+            //print("The selection is \(muscleGroupOptions[muscleGroupSelection!].paramName)")
         }
         else {
             muscleGroupSelection = nil
@@ -304,10 +295,10 @@ class WorkoutSelectorVC: UIViewController {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func refreshStyleOption(notification: NSNotification) {
         
-        print("Style Observer Notified")
+        //print("Style Observer Notified")
         if let opt = styleOptionControler.collectionOption.selectedItem {
             styleSelection = opt.item
-            print("The selection is \(workoutStyleOptions[styleSelection!].paramName)")
+            //print("The selection is \(workoutStyleOptions[styleSelection!].paramName)")
         }
         else {
             styleSelection = nil
@@ -323,10 +314,10 @@ class WorkoutSelectorVC: UIViewController {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func refreshDifficultyOption(notification: NSNotification){
         
-        print("Difficlty Observer Notified")
+        //print("Difficlty Observer Notified")
         if let opt = levelOptionController.collectionOption.selectedItem {
             difficultySelection = opt.item
-            print("The selection is \(difficultyOptions[difficultySelection!].paramName)")
+            //print("The selection is \(difficultyOptions[difficultySelection!].paramName)")
         }
         else {
             difficultySelection = nil
@@ -353,43 +344,25 @@ class WorkoutSelectorVC: UIViewController {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
-    // Function: WorkoutSelectorVC: buildRequestString                                                                       //
+    // Function: WorkoutSelectorVC: setRoutineRequestOptions                                                                 //
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    func buildRequestString() -> String?
-//    {
-//        var bodyPartString   : String = ""
-//        var styleString      : String = ""
-//        var difficultyString : String = ""
-//        
-//        if let i = muscleGroupSelection
-//        {
-//            bodyPartString = muscleGroupOptions[i].optionName
-//        }
-//        else
-//        {
-//            return nil
-//        }
-//        if let j = styleSelection
-//        {
-//            styleString = workoutStyleOptions[j].optionName
-//        }
-//        else
-//        {
-//            return nil
-//        }
-//        if let k = difficultySelection
-//        {
-//            difficultyString = DifficultyOptions[k].optionName
-//        }
-//        else
-//        {
-//            return nil
-//        }
-//        
-//        print("Style String = \(styleString)")
-//        return "http://localhost:8080/SweatRouletteJPA/resources/WorkoutResult?bodyPart=\(bodyPartString)&style=strength&intensity=\(difficultyString)"
-//    }
+    func setRoutineRequestOptions() -> Void
+    {
+        //Make sure all the parameters are slected
+        if let i:Int = muscleGroupSelection, let j:Int = styleSelection, let k:Int = difficultySelection
+        {
+            let routine = request?.workoutTable?.workoutModel.getRoutineByID(muscleGroupOptions[i].labelName)
+            routine?.options.muscleGroup = muscleGroupOptions [i].paramName
+            routine?.options.style       = workoutStyleOptions[j].paramName
+            routine?.options.difficulty  = difficultyOptions  [k].paramName
+            
+            request?.currentRoutine = routine
+        }
+        else {
+            request?.currentRoutine = nil
+        }
+    }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
@@ -397,7 +370,6 @@ class WorkoutSelectorVC: UIViewController {
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func slideNavigation (sender: UIButton) {
-        //print("Slide Navigation Time")
         //delegate?.toggleLeftPanel?()
         if (delegate != nil) {
             delegate?.toggleLeftPanel!()

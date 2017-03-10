@@ -28,23 +28,23 @@ class ContainerViewController: UIViewController {
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func viewDidLoad() {
-        print("ViewDidLoad")
         super.viewDidLoad()
         
         // Configure the Workout Selector VC
         centerViewController = WorkoutSelectorVC()
-        centerViewController.request       = self.requestViewController
-        centerViewController.delegate      = self
+        centerViewController.request          = self.requestViewController
+        centerViewController.delegate         = self
         
         // Configure the Workout Request VC
-        requestViewController.workoutTable = self.workoutTableController
-        requestViewController.delegate     = self
+        requestViewController.workoutTable    = self.workoutTableController
+        requestViewController.delegate        = self
         
         // Configure the Workout Table VC
-        workoutTableController.delegate = self
+        workoutTableController.delegate       = self
+        workoutTableController.workoutRequest = self.requestViewController
         
         // Configure the Workout Archive VC
-        archiveViewController.delegate     = self
+        archiveViewController.delegate        = self
         
         
         // wrap the centerViewController in a navigation controller, so we can push views to it
