@@ -9,13 +9,14 @@
 import Foundation
 
 struct WorkoutOptionData {
-    var labelName: String
-    var paramName: String
+    var labelName  : String
+    var paramName  : String
+    var isSelected : Bool
     
-    
-    init(label: String, param: String) {
-        labelName = label
-        paramName = param
+    init(label: String, param: String, selected: Bool) {
+        labelName  = label
+        paramName  = param
+        isSelected = selected
     }
     
 }
