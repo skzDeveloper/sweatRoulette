@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:SelectorView.xcodeproj">
+      location = "self:/Users/ServerAdmin/Documents/sweatRoulette/SweatRoulette.xcodeproj">
    </FileRef>
 </Workspace>

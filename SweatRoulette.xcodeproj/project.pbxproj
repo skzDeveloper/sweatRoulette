@@ -51,10 +51,10 @@
 		1F7A2B331CEAFA2600095F72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F7A2B361CEAFA2600095F72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1F7A2B381CEAFA2600095F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1F7A2B3D1CEAFA2600095F72 /* SelectorViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SelectorViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F7A2B3D1CEAFA2600095F72 /* SweatRouletteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SweatRouletteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F7A2B411CEAFA2600095F72 /* SelectorViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorViewTests.swift; sourceTree = "<group>"; };
 		1F7A2B431CEAFA2600095F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1F7A2B481CEAFA2600095F72 /* SelectorViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SelectorViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F7A2B481CEAFA2600095F72 /* SweatRouletteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SweatRouletteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F7A2B4C1CEAFA2700095F72 /* SelectorViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorViewUITests.swift; sourceTree = "<group>"; };
 		1F7A2B4E1CEAFA2700095F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1F7A2B5A1CEAFAF900095F72 /* WorkoutSelectorVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutSelectorVC.swift; path = ../WorkoutSelectorVC.swift; sourceTree = "<group>"; };
@@ -112,8 +112,8 @@
 			isa = PBXGroup;
 			children = (
 				1F7A2B291CEAFA2400095F72 /* SweatRoulette.app */,
-				1F7A2B3D1CEAFA2600095F72 /* SelectorViewTests.xctest */,
-				1F7A2B481CEAFA2600095F72 /* SelectorViewUITests.xctest */,
+				1F7A2B3D1CEAFA2600095F72 /* SweatRouletteTests.xctest */,
+				1F7A2B481CEAFA2600095F72 /* SweatRouletteTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -181,9 +181,9 @@
 			productReference = 1F7A2B291CEAFA2400095F72 /* SweatRoulette.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1F7A2B3C1CEAFA2600095F72 /* SelectorViewTests */ = {
+		1F7A2B3C1CEAFA2600095F72 /* SweatRouletteTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F7A2B541CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SelectorViewTests" */;
+			buildConfigurationList = 1F7A2B541CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SweatRouletteTests" */;
 			buildPhases = (
 				1F7A2B391CEAFA2600095F72 /* Sources */,
 				1F7A2B3A1CEAFA2600095F72 /* Frameworks */,
@@ -194,14 +194,14 @@
 			dependencies = (
 				1F7A2B3F1CEAFA2600095F72 /* PBXTargetDependency */,
 			);
-			name = SelectorViewTests;
+			name = SweatRouletteTests;
 			productName = SelectorViewTests;
-			productReference = 1F7A2B3D1CEAFA2600095F72 /* SelectorViewTests.xctest */;
+			productReference = 1F7A2B3D1CEAFA2600095F72 /* SweatRouletteTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		1F7A2B471CEAFA2600095F72 /* SelectorViewUITests */ = {
+		1F7A2B471CEAFA2600095F72 /* SweatRouletteUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F7A2B571CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SelectorViewUITests" */;
+			buildConfigurationList = 1F7A2B571CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SweatRouletteUITests" */;
 			buildPhases = (
 				1F7A2B441CEAFA2600095F72 /* Sources */,
 				1F7A2B451CEAFA2600095F72 /* Frameworks */,
@@ -212,9 +212,9 @@
 			dependencies = (
 				1F7A2B4A1CEAFA2600095F72 /* PBXTargetDependency */,
 			);
-			name = SelectorViewUITests;
+			name = SweatRouletteUITests;
 			productName = SelectorViewUITests;
-			productReference = 1F7A2B481CEAFA2600095F72 /* SelectorViewUITests.xctest */;
+			productReference = 1F7A2B481CEAFA2600095F72 /* SweatRouletteTests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -243,7 +243,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1F7A2B241CEAFA2400095F72 /* Build configuration list for PBXProject "SelectorView" */;
+			buildConfigurationList = 1F7A2B241CEAFA2400095F72 /* Build configuration list for PBXProject "SweatRoulette" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -257,8 +257,8 @@
 			projectRoot = "";
 			targets = (
 				1F7A2B281CEAFA2400095F72 /* SweatRoulette */,
-				1F7A2B3C1CEAFA2600095F72 /* SelectorViewTests */,
-				1F7A2B471CEAFA2600095F72 /* SelectorViewUITests */,
+				1F7A2B3C1CEAFA2600095F72 /* SweatRouletteTests */,
+				1F7A2B471CEAFA2600095F72 /* SweatRouletteUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -465,8 +465,8 @@
 				INFOPLIST_FILE = SelectorViewTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.skz.SelectorViewTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SelectorView.app/SelectorView";
+				PRODUCT_NAME = SweatRouletteTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SweatRoulette.app/SweatRoulette";
 			};
 			name = Debug;
 		};
@@ -477,8 +477,8 @@
 				INFOPLIST_FILE = SelectorViewTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.skz.SelectorViewTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SelectorView.app/SelectorView";
+				PRODUCT_NAME = SweatRouletteTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SweatRoulette.app/SweatRoulette";
 			};
 			name = Release;
 		};
@@ -488,7 +488,7 @@
 				INFOPLIST_FILE = SelectorViewUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.skz.SelectorViewUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SweatRouletteTests;
 				TEST_TARGET_NAME = SelectorView;
 				USES_XCTRUNNER = YES;
 			};
@@ -500,7 +500,7 @@
 				INFOPLIST_FILE = SelectorViewUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.skz.SelectorViewUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SweatRouletteTests;
 				TEST_TARGET_NAME = SelectorView;
 				USES_XCTRUNNER = YES;
 			};
@@ -509,7 +509,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1F7A2B241CEAFA2400095F72 /* Build configuration list for PBXProject "SelectorView" */ = {
+		1F7A2B241CEAFA2400095F72 /* Build configuration list for PBXProject "SweatRoulette" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F7A2B4F1CEAFA2700095F72 /* Debug */,
@@ -527,7 +527,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F7A2B541CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SelectorViewTests" */ = {
+		1F7A2B541CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SweatRouletteTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F7A2B551CEAFA2700095F72 /* Debug */,
@@ -536,7 +536,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F7A2B571CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SelectorViewUITests" */ = {
+		1F7A2B571CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SweatRouletteUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F7A2B581CEAFA2700095F72 /* Debug */,

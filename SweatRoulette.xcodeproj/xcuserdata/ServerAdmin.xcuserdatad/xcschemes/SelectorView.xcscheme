@@ -17,7 +17,7 @@
                BlueprintIdentifier = "1F7A2B281CEAFA2400095F72"
                BuildableName = "SweatRoulette.app"
                BlueprintName = "SweatRoulette"
-               ReferencedContainer = "container:SelectorView.xcodeproj">
+               ReferencedContainer = "container:SweatRoulette.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F7A2B3C1CEAFA2600095F72"
-               BuildableName = "SelectorViewTests.xctest"
-               BlueprintName = "SelectorViewTests"
-               ReferencedContainer = "container:SelectorView.xcodeproj">
+               BuildableName = "SweatRouletteTests.xctest"
+               BlueprintName = "SweatRouletteTests"
+               ReferencedContainer = "container:SweatRoulette.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F7A2B471CEAFA2600095F72"
-               BuildableName = "SelectorViewUITests.xctest"
-               BlueprintName = "SelectorViewUITests"
-               ReferencedContainer = "container:SelectorView.xcodeproj">
+               BuildableName = "SweatRouletteTests.xctest"
+               BlueprintName = "SweatRouletteUITests"
+               ReferencedContainer = "container:SweatRoulette.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,7 +55,7 @@
             BlueprintIdentifier = "1F7A2B281CEAFA2400095F72"
             BuildableName = "SweatRoulette.app"
             BlueprintName = "SweatRoulette"
-            ReferencedContainer = "container:SelectorView.xcodeproj">
+            ReferencedContainer = "container:SweatRoulette.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -78,7 +78,7 @@
             BlueprintIdentifier = "1F7A2B281CEAFA2400095F72"
             BuildableName = "SweatRoulette.app"
             BlueprintName = "SweatRoulette"
-            ReferencedContainer = "container:SelectorView.xcodeproj">
+            ReferencedContainer = "container:SweatRoulette.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -97,7 +97,7 @@
             BlueprintIdentifier = "1F7A2B281CEAFA2400095F72"
             BuildableName = "SweatRoulette.app"
             BlueprintName = "SweatRoulette"
-            ReferencedContainer = "container:SelectorView.xcodeproj">
+            ReferencedContainer = "container:SweatRoulette.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
