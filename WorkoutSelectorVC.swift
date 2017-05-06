@@ -248,6 +248,7 @@ class WorkoutSelectorVC: UIViewController {
             views: d))
     }
     
+    // MARK: - WorkoutSelectorVC Logic
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
     // Function: WorkoutSelectorVC: buttonPressed                                                                            //
@@ -350,18 +351,18 @@ class WorkoutSelectorVC: UIViewController {
     func setRoutineRequestOptions() -> Void
     {
         //Make sure all the parameters are slected
-        if let i:Int = muscleGroupSelection, let j:Int = styleSelection, let k:Int = difficultySelection
-        {
-            let routine = request?.workoutTable?.workoutModel.getRoutineByID(muscleGroupOptions[i].labelName)
-            routine?.options.muscleGroup = muscleGroupOptions [i].paramName
-            routine?.options.style       = workoutStyleOptions[j].paramName
-            routine?.options.difficulty  = difficultyOptions  [k].paramName
+        //if let i:Int = muscleGroupSelection, let j:Int = styleSelection, let k:Int = difficultySelection
+        //{
+            //let routine = request?.workoutTable?.workoutModel.getRoutineByID(muscleGroupOptions[i].labelName)
+            //routine?.options.muscleGroup = muscleGroupOptions [i].paramName
+            //routine?.options.style       = workoutStyleOptions[j].paramName
+            //routine?.options.difficulty  = difficultyOptions  [k].paramName
             
-            request?.currentRoutine = routine
-        }
-        else {
-            request?.currentRoutine = nil
-        }
+            //request?.currentRoutine = routine
+        //}
+        //else {
+            //request?.currentRoutine = nil
+        //}
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F7A2B281CEAFA2400095F72"
-               BuildableName = "SelectorView.app"
-               BlueprintName = "SelectorView"
+               BuildableName = "SweatRoulette.app"
+               BlueprintName = "SweatRoulette"
                ReferencedContainer = "container:SelectorView.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -53,8 +53,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F7A2B281CEAFA2400095F72"
-            BuildableName = "SelectorView.app"
-            BlueprintName = "SelectorView"
+            BuildableName = "SweatRoulette.app"
+            BlueprintName = "SweatRoulette"
             ReferencedContainer = "container:SelectorView.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -76,8 +76,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F7A2B281CEAFA2400095F72"
-            BuildableName = "SelectorView.app"
-            BlueprintName = "SelectorView"
+            BuildableName = "SweatRoulette.app"
+            BlueprintName = "SweatRoulette"
             ReferencedContainer = "container:SelectorView.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -95,8 +95,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F7A2B281CEAFA2400095F72"
-            BuildableName = "SelectorView.app"
-            BlueprintName = "SelectorView"
+            BuildableName = "SweatRoulette.app"
+            BlueprintName = "SweatRoulette"
             ReferencedContainer = "container:SelectorView.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

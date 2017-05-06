@@ -47,6 +47,7 @@ class WorkoutOptionVC: UIViewController {
         super.init(coder: aDecoder)
     }
     
+    // MARK: - UIViewController Overrides
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
     // Function: loadView                                                                                                             //

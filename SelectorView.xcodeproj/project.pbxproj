@@ -26,8 +26,6 @@
 		1F9577DE1D14886D00525C51 /* OptionCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9577DD1D14886D00525C51 /* OptionCollectionVC.swift */; };
 		1F9577E01D14923F00525C51 /* WorkoutOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9577DF1D14923F00525C51 /* WorkoutOptionCell.swift */; };
 		1F9577E21D1901D500525C51 /* WorkoutSaveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9577E11D1901D500525C51 /* WorkoutSaveVC.swift */; };
-		E3A0CEEA1E7247B1006ED20B /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E3A0CEE81E7247B1006ED20B /* Model.xcdatamodeld */; };
-		E3FE98CC1E52CC2A00E843C4 /* ExerciseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E3FE98CB1E52CC2A00E843C4 /* ExerciseCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1F7A2B291CEAFA2400095F72 /* SelectorView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SelectorView.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F7A2B291CEAFA2400095F72 /* SweatRoulette.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SweatRoulette.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F7A2B2C1CEAFA2400095F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F7A2B331CEAFA2600095F72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F7A2B361CEAFA2600095F72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -73,8 +71,6 @@
 		1F9577DD1D14886D00525C51 /* OptionCollectionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionCollectionVC.swift; sourceTree = "<group>"; };
 		1F9577DF1D14923F00525C51 /* WorkoutOptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutOptionCell.swift; sourceTree = "<group>"; };
 		1F9577E11D1901D500525C51 /* WorkoutSaveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutSaveVC.swift; sourceTree = "<group>"; };
-		E3A0CEE91E7247B1006ED20B /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		E3FE98CB1E52CC2A00E843C4 /* ExerciseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExerciseCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,7 +111,7 @@
 		1F7A2B2A1CEAFA2400095F72 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1F7A2B291CEAFA2400095F72 /* SelectorView.app */,
+				1F7A2B291CEAFA2400095F72 /* SweatRoulette.app */,
 				1F7A2B3D1CEAFA2600095F72 /* SelectorViewTests.xctest */,
 				1F7A2B481CEAFA2600095F72 /* SelectorViewUITests.xctest */,
 			);
@@ -143,8 +139,6 @@
 				1F7A2B331CEAFA2600095F72 /* Assets.xcassets */,
 				1F7A2B351CEAFA2600095F72 /* LaunchScreen.storyboard */,
 				1F7A2B381CEAFA2600095F72 /* Info.plist */,
-				E3FE98CB1E52CC2A00E843C4 /* ExerciseCell.xib */,
-				E3A0CEE81E7247B1006ED20B /* Model.xcdatamodeld */,
 			);
 			path = SelectorView;
 			sourceTree = "<group>";
@@ -170,9 +164,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1F7A2B281CEAFA2400095F72 /* SelectorView */ = {
+		1F7A2B281CEAFA2400095F72 /* SweatRoulette */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F7A2B511CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SelectorView" */;
+			buildConfigurationList = 1F7A2B511CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SweatRoulette" */;
 			buildPhases = (
 				1F7A2B251CEAFA2400095F72 /* Sources */,
 				1F7A2B261CEAFA2400095F72 /* Frameworks */,
@@ -182,9 +176,9 @@
 			);
 			dependencies = (
 			);
-			name = SelectorView;
+			name = SweatRoulette;
 			productName = SelectorView;
-			productReference = 1F7A2B291CEAFA2400095F72 /* SelectorView.app */;
+			productReference = 1F7A2B291CEAFA2400095F72 /* SweatRoulette.app */;
 			productType = "com.apple.product-type.application";
 		};
 		1F7A2B3C1CEAFA2600095F72 /* SelectorViewTests */ = {
@@ -262,7 +256,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1F7A2B281CEAFA2400095F72 /* SelectorView */,
+				1F7A2B281CEAFA2400095F72 /* SweatRoulette */,
 				1F7A2B3C1CEAFA2600095F72 /* SelectorViewTests */,
 				1F7A2B471CEAFA2600095F72 /* SelectorViewUITests */,
 			);
@@ -275,7 +269,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F7A2B371CEAFA2600095F72 /* LaunchScreen.storyboard in Resources */,
-				E3FE98CC1E52CC2A00E843C4 /* ExerciseCell.xib in Resources */,
 				1F7A2B341CEAFA2600095F72 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -312,7 +305,6 @@
 				1F9577C81CFEAE4100525C51 /* ContainerViewController.swift in Sources */,
 				1F9577E21D1901D500525C51 /* WorkoutSaveVC.swift in Sources */,
 				1F9577D01D00F24900525C51 /* WorkoutRequestVC.swift in Sources */,
-				E3A0CEEA1E7247B1006ED20B /* Model.xcdatamodeld in Sources */,
 				1F9577DA1D0FC71100525C51 /* ArchiveCell.swift in Sources */,
 				1F9577DC1D10EFBA00525C51 /* WorkoutOptionVC.swift in Sources */,
 				1F9577D21D00FFFC00525C51 /* WorkoutTableVC.swift in Sources */,
@@ -341,12 +333,12 @@
 /* Begin PBXTargetDependency section */
 		1F7A2B3F1CEAFA2600095F72 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1F7A2B281CEAFA2400095F72 /* SelectorView */;
+			target = 1F7A2B281CEAFA2400095F72 /* SweatRoulette */;
 			targetProxy = 1F7A2B3E1CEAFA2600095F72 /* PBXContainerItemProxy */;
 		};
 		1F7A2B4A1CEAFA2600095F72 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1F7A2B281CEAFA2400095F72 /* SelectorView */;
+			target = 1F7A2B281CEAFA2400095F72 /* SweatRoulette */;
 			targetProxy = 1F7A2B491CEAFA2600095F72 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -450,7 +442,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SelectorView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.skz.SelectorView;
+				PRODUCT_BUNDLE_IDENTIFIER = com.skz.SweatRoulette;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -461,7 +453,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SelectorView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.skz.SelectorView;
+				PRODUCT_BUNDLE_IDENTIFIER = com.skz.SweatRoulette;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -526,7 +518,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F7A2B511CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SelectorView" */ = {
+		1F7A2B511CEAFA2700095F72 /* Build configuration list for PBXNativeTarget "SweatRoulette" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F7A2B521CEAFA2700095F72 /* Debug */,
@@ -554,19 +546,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		E3A0CEE81E7247B1006ED20B /* Model.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				E3A0CEE91E7247B1006ED20B /* Model.xcdatamodel */,
-			);
-			currentVersion = E3A0CEE91E7247B1006ED20B /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 1F7A2B211CEAFA2400095F72 /* Project object */;
 }

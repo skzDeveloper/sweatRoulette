@@ -13,6 +13,7 @@ private let reuseIdentifier = "OptionCell"
 class OptionCollectionVC: UICollectionViewController {
     
     var workoutOptionData:[WorkoutOptionData] = []
+    var selectedItem     : NSIndexPath!
     
 //    var SCROLL_CONTENT_WIDTH : CGFloat = self.collectionView!.contentSize.width
 //    var SCROLL_PAGE_WIDTH    : CGFloat = self.collectionView!.bounds.width

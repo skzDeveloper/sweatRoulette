@@ -10,7 +10,8 @@ import UIKit
 
 class WorkoutTableVC: UITableViewController {
     
-    var delegate: WorkoutSelectorVCDelegate?
+    var delegate       :WorkoutSelectorVCDelegate?
+    var routineRequest :WorkoutRequestVC!
     
     var workoutModel:Workout = Workout()
     
