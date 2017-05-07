@@ -28,7 +28,7 @@ class WorkoutSelectorVC: UIViewController {
     var styleOptionControler:  WorkoutOptionVC!
     var levelOptionController: WorkoutOptionVC!
     
-    let muscleGroupOptions: [WorkoutOptionData]  = [
+    var muscleGroupOptions: [WorkoutOptionData]  = [
         WorkoutOptionData(label: "Quads"       , param: "quads",       selected:false),
         WorkoutOptionData(label: "Shoulders"   , param: "shoulders",   selected:false),
         WorkoutOptionData(label: "Traps"       , param: "traps",       selected:false),
@@ -51,7 +51,7 @@ class WorkoutSelectorVC: UIViewController {
         WorkoutOptionData(label: "Biceps"      , param: "biceps",      selected:false),
         WorkoutOptionData(label: "Calves"      , param: "calves",      selected:false)]
     
-    let workoutStyleOptions: [WorkoutOptionData] = [
+    var workoutStyleOptions: [WorkoutOptionData] = [
         WorkoutOptionData(label: "Olympic"     , param: "olympic",     selected:false),
         WorkoutOptionData(label: "Polymetrics" , param: "polymetrics", selected:false),
         WorkoutOptionData(label: "Strength"    , param: "strength",    selected:false),
@@ -67,7 +67,7 @@ class WorkoutSelectorVC: UIViewController {
         WorkoutOptionData(label: "Olympic"     , param: "olympic",     selected:false),
         WorkoutOptionData(label: "Polymetrics" , param: "polymetrics", selected:false)]
     
-    let difficultyOptions: [WorkoutOptionData]   = [
+    var difficultyOptions: [WorkoutOptionData]   = [
         WorkoutOptionData(label: "Beginner"    , param: "beginner",    selected:false),
         WorkoutOptionData(label: "Intermediate", param: "intermediate",selected:false),
         WorkoutOptionData(label: "Advanced"    , param: "advanced",    selected:false),
@@ -121,9 +121,9 @@ class WorkoutSelectorVC: UIViewController {
         button.backgroundColor = UIColor(colorLiteralRed: 0.0, green: 0.68, blue: 0.94, alpha: 1.0)
         button.addTarget(self, action: "buttonPressed:", forControlEvents: .TouchDown)
         
-        muscleOptionControler = WorkoutOptionVC(titleText: "Muscle Group" , options: muscleGroupOptions)
-        styleOptionControler  = WorkoutOptionVC(titleText: "Workout Style", options: workoutStyleOptions)
-        levelOptionController = WorkoutOptionVC(titleText: "Difficulty"   , options: difficultyOptions)
+        muscleOptionControler = WorkoutOptionVC(titleText: "Muscle Group" , options: &muscleGroupOptions)
+        styleOptionControler  = WorkoutOptionVC(titleText: "Workout Style", options: &workoutStyleOptions)
+        levelOptionController = WorkoutOptionVC(titleText: "Difficulty"   , options: &difficultyOptions)
         
         self.addChildViewController(muscleOptionControler)
         self.addChildViewController(styleOptionControler)

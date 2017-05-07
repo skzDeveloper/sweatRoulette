@@ -27,7 +27,7 @@ class OptionCollectionVC: UICollectionViewController {
     // Function: init                                                                                                                 //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    init(collectionViewLayout layout: UICollectionViewLayout, options: [WorkoutOptionData]) {
+    init(collectionViewLayout layout: UICollectionViewLayout, inout options: [WorkoutOptionData]) {
         super.init(collectionViewLayout: layout)
         
         self.collectionView!.registerClass(WorkoutOptionCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -71,20 +71,6 @@ class OptionCollectionVC: UICollectionViewController {
         //self.collectionView(self.collectionView!, didSelectItemAtIndexPath: idx)
 
     }
-    
-    
-    override func viewWillAppear(animated: Bool) {
-        print("view Will Appear")
-        super.viewWillAppear(animated)
-        
-        
-    
-        
-        
-        //let idx : NSIndexPath = NSIndexPath(index: 2)
-        //self.collectionView?.selectItemAtIndexPath(idx, animated: true, scrollPosition: UICollectionViewScrollPosition.CenteredHorizontally)
-    }
-
 
     // MARK: UICollectionViewDataSource
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,8 +101,10 @@ class OptionCollectionVC: UICollectionViewController {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as? WorkoutOptionCell
         
         //Configure The cell
-        cell?.optionText.text = workoutOptionData[indexPath.item].labelName
-        cell?.iconImage.image = UIImage(named: workoutOptionData[indexPath.item].labelName)
+        cell?.optionText.text     = workoutOptionData[indexPath.item].labelName
+        cell?.iconImage.image     = UIImage(named: workoutOptionData[indexPath.item].labelName)
+        cell?.selectedView.hidden = true
+        cell?.checkImage.hidden   = true
         
         return cell!
     }
@@ -125,22 +113,31 @@ class OptionCollectionVC: UICollectionViewController {
     // MARK: UIScrollViewDelegate
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    // Function: scrollViewShouldScrollToTop
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+        return false
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     // Function: scrollViewDidScroll
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func scrollViewDidScroll(scrollView: UIScrollView) {
-        print("scroll View Did Scroll to content offsetx \(scrollView.contentOffset.x)")
-
+        //print("scroll View Did Scroll to content offsetx \(scrollView.contentOffset.x)")
         let flowLayout: UICollectionViewFlowLayout = self.collectionViewLayout as! UICollectionViewFlowLayout
         let SCROLL_CONTENT_WIDTH = self.collectionView!.contentSize.width
         let SCROLL_PAGE_WIDTH    = self.collectionView!.bounds.width
         let ITEM_SPACING         = (SCROLL_PAGE_WIDTH * 0.1) / 4
         let ITEM_WIDTH           = flowLayout.itemSize.width
         let ITEM_OFFSET          = ITEM_WIDTH + ITEM_SPACING
+
         
-        print("Scroll Content Width \(SCROLL_CONTENT_WIDTH)")
-        print("Scroll Page Width \(SCROLL_PAGE_WIDTH)")
-        print("Item Width \(ITEM_WIDTH)")
+        //print("Scroll Content Width \(SCROLL_CONTENT_WIDTH)")
+        //print("Scroll Page Width \(SCROLL_PAGE_WIDTH)")
+        //print("Item Width \(ITEM_WIDTH)")
         
 //        let FAKE_PAGE_OFFSET:CGFloat  = 400.00
 //        let REAL_SIZE                 = (CGFloat)((workoutOptionData.count - 8) * ITEM_WIDTH)
@@ -184,198 +181,167 @@ class OptionCollectionVC: UICollectionViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         print("scroll View Did End Decelerating")
-//        let cells = collectionView?.visibleCells()
-//        
-//        for cell in cells! {
-//            let collectionCell = cell as? WorkoutOptionCell
-//            print("Option: \(collectionCell?.optionText.text)")
-//        }
-//        if let collectionView = scrollView as? UICollectionView {
-//            let visbleIndexArray = collectionView.indexPathsForVisibleItems()
-//            let numberOfVisibleItems = visbleIndexArray.count
-//            var idx = numberOfVisibleItems / 2
-//            
-//            // There are 4 Visible Items
-//            if (numberOfVisibleItems == 4) {
-//                if (self.scrollDirection == ScrollDirection.Right) {
-//                    idx--
-//                }
-//            }
-//            
-//            let indexPath = translateToRealIndex(visbleIndexArray[idx])
-//            
-//            setSelectedOpion(indexPath)
         
-//            collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: true)
-//        }
-        var idxArray : [NSIndexPath] = (collectionView?.indexPathsForVisibleItems())!
-        idxArray.sortInPlace( {$0.item < $1.item } )
+        let collectionView = scrollView as! UICollectionView
         
-        for idx in idxArray {
-            print("The array index is \(self.workoutOptionData[idx.item].labelName)")
+        //Get the visible Index Paths
+        if var idxArray : [NSIndexPath] = collectionView.indexPathsForVisibleItems() {
+            // Put the Index Paths in order
+            idxArray.sortInPlace( {$0.item < $1.item } )
+            // Select the middle Index Path
+            let i:Int = idxArray.count/2
+            let selectedIndexPath:NSIndexPath = idxArray[i]
+        
+            collectionView.selectItemAtIndexPath(selectedIndexPath,
+                animated       : true,
+                scrollPosition : UICollectionViewScrollPosition.CenteredHorizontally)
         }
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    // Function: scrollViewShouldScrollToTop
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
-        return false
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Function: scrollViewWillEndDragging
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        print("scroll view will end dragging")
-        
-        //let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as? WorkoutOptionCell
- 
-        
-        
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Function: scrollViewDidEndDragging
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print("scroll view did end dragging")
-
-//
-//        if (scrollView.dragging == false && scrollView.tracking == true) {
-//            print("End Dragging")
-//            
-//            if let collectionView = scrollView as? UICollectionView {
-//                let visbleIndexArray = collectionView.indexPathsForVisibleItems()
-//                let numberOfVisibleItems = visbleIndexArray.count
-//                var idx = numberOfVisibleItems / 2
-//                
-//                // There are 4 Visible Items
-//                if (numberOfVisibleItems == 4) {
-//                    if (self.scrollDirection == ScrollDirection.Right) {
-//                        idx--
-//                    }
-//                }
-//                
-//                let indexPath = translateToRealIndex(visbleIndexArray[idx])
-//                
-//                setSelectedOpion(indexPath)
-//                collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: true)
-//            }
-//        }
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Function: scrollViewWillBeginDragging
+    // Function: scrollView: WillBeginDragging
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         print("scroll View Will Begin Dragging")
-//        if let currentlySelectedItem = self.selectedItem {
-//            self.selectedItem = nil
-//            selectOptionViewCell(currentlySelectedItem, isSelected: false)
-//        }
+        
+        let collectionView = scrollView as! UICollectionView
+        
+        if let selectedIndex: NSIndexPath = self.getSelectedIndexPath(collectionView) {
+            self.deselectItem(collectionView, indexPath: selectedIndex)
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    // Function: scrollViewWillBeginDecelerating
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        print("scroll View Did End Scrolling Animation")
-//        
-//        if let currentlySelectedItem = self.selectedItem {
-//            selectOptionViewCell(currentlySelectedItem, isSelected: true)
-//        }
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Function: scrollViewWillBeginDecelerating
+    // Function: scrollView: WillBeginDecelerating
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
-        print("scroll view will begin decelerating")
+        //print("scroll view will begin decelerating")
     }
     
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Function: scrollView: DidEndScrollingAnimation
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+        print("Scroll View Did End Scrolling Animation")
+        let collectionView = scrollView as! UICollectionView
+        
+        if let selectedIndex: NSIndexPath = self.getSelectedIndexPath(collectionView) {
+            self.selectItem(collectionView, indexPath: selectedIndex)
+        }
+    }
     
     // MARK: UICollectionViewDelegate
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Function: collectionView: shouldSelectItemAtIndexPath
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-// 
-        print("Collection View Should Select Item At Index Path \(indexPath.item)")
-        let selectNewItem: Bool = true
-//        
-//        // An Item is currently selected
-//        if let previouslySelected = self.selectedItem {
-//            // Deselect Currently Selected Item
-//            selectOptionViewCell(previouslySelected, isSelected: false)
-//            
-//            // The Selected Item is the same as the Previously Selected Item
-//            if (indexPath.item == previouslySelected.item) {
-//                // Do not select an Item
-//                selectNewItem = false
-//                // Set to Nothing Selected
-//                setSelectedOpion(nil)
-//            }
-//        }
-        
-        return selectNewItem
-    }
-
-    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // Function: collectionView: didSelectItemAtIndexPath
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        print("Did select index \(indexPath.item)")
-        self.collectionView?.selectItemAtIndexPath(indexPath, animated: true, scrollPosition: UICollectionViewScrollPosition.Left)
-//        let selectedIndexPath: NSIndexPath = translateToRealIndex(indexPath)
-//        
-//        struct LastSelected {
-//            static var indexPath: NSIndexPath? = nil
-//        }
-//        
-//        // Scroll to Real Array Position
-//        setSelectedOpion(selectedIndexPath)
-//        
-//        // The currently selected item was the last selected item
-//        if let lastSelected = LastSelected.indexPath {
-//            if (lastSelected == selectedIndexPath) {
-//                selectOptionViewCell(selectedIndexPath, isSelected: true)
-//            }
-//        }
-//        LastSelected.indexPath = selectedIndexPath
-//        print("Did select item \(workoutOptionData[selectedIndexPath.item].optionName) scrolling to index \(selectedIndexPath.item)")
-//        collectionView.scrollToItemAtIndexPath(selectedIndexPath, atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: true)
+        print("Collection View Did Select Item at Index Path \(indexPath.item)")
+        
+        collectionView.selectItemAtIndexPath(indexPath,
+            animated       : true,
+            scrollPosition : UICollectionViewScrollPosition.CenteredHorizontally)
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Function: collectionView: didDeselectItemAtIndexPath
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        print("Collection View Did De-Select Item At Index Path \(indexPath.item)")
+        
+        self.deselectItem(collectionView, indexPath: indexPath)
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Function: OptionCollectionVC: selectItem
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        var shouldSelect = true
+        
+        //Get the current selection
+        if let currentSelection: NSIndexPath = self.getSelectedIndexPath(collectionView) {
+            //The Selected Item is already selected
+            if currentSelection.item == indexPath.item {
+                shouldSelect = false
+                self.deselectItem(collectionView, indexPath: indexPath)
+            }
+        }
+        
+        return shouldSelect
+    }
+
+    // MARK: OptionCollectionVC - Logic
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Function: OptionCollectionVC: getSelectedItem
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func getSelectedIndexPath(collectionView: UICollectionView) -> NSIndexPath?
+    {
+        var selectedIndexPath: NSIndexPath? = nil
+        //Get any selected Index Paths
+        if collectionView.indexPathsForSelectedItems() != nil {
+            //DEBUG
+            if (collectionView.indexPathsForSelectedItems()!.count > 1) {
+                print("ERROR: There should only be one selected item at a time")
+            }
+            
+            selectedIndexPath = collectionView.indexPathsForSelectedItems()!.first
+        }
+        return selectedIndexPath
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Function: OptionCollectionVC: selectItem
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func selectItem(collectionView: UICollectionView, indexPath: NSIndexPath) -> Void {
+        
+            
+        //Highlight the cell
+        if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath) {
+            let workoutOptionCell: WorkoutOptionCell = cell as! WorkoutOptionCell
+            workoutOptionCell.select()
+        }
+
         
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    // Function: collectionView: shouldDeselectItemAtIndexPath
+    // Function: OptionCollectionVC: deselectItem
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func collectionView(collectionView: UICollectionView, shouldDeselectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        print("Collection View Should De-Select Item At Index Path \(indexPath.item)")
-        
-        return true
+    func deselectItem(collectionView: UICollectionView, indexPath: NSIndexPath) -> Void {
+        if collectionView.indexPathsForSelectedItems() != nil {
+            //DEBUG
+            if (collectionView.indexPathsForSelectedItems()!.count > 1) {
+                print("ERROR: There should only be one selected item at a time")
+            }
+            //Un-Highlight the cell
+            if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath) {
+                let workoutOptionCell: WorkoutOptionCell = cell as! WorkoutOptionCell
+                workoutOptionCell.deselect()
+            }
+            
+            collectionView.deselectItemAtIndexPath(indexPath, animated: false)
+        }
+
     }
     
+    // MARK: MISC Functions
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // Function: add array ele
@@ -384,17 +350,13 @@ class OptionCollectionVC: UICollectionViewController {
     func fooArrayOp(itemsPerPage:Int) {
         let beginIndex: Int = workoutOptionData.count - itemsPerPage
         let endIndex  : Int = workoutOptionData.count - 1
-
+        
         let fooArray: [WorkoutOptionData] = Array(self.workoutOptionData[0...itemsPerPage])
         let tmpArray: [WorkoutOptionData] = Array(self.workoutOptionData[beginIndex...endIndex])
         
         self.workoutOptionData.insertContentsOf(tmpArray, at: 0)
         self.workoutOptionData.appendContentsOf(fooArray)
         
-    }
-    
-    override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        print("Collection View Did De-Select Item At Index Path \(indexPath.item)")
     }
     
     func translateToRealIndex(indexPath: NSIndexPath) ->NSIndexPath {
