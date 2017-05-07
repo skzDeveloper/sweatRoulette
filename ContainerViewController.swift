@@ -37,6 +37,7 @@ class ContainerViewController: UIViewController {
         
         // Configure the Workout Table VC
         requestViewController.workoutTable    = self.workoutTableController
+        requestViewController.workoutSelector = self.centerViewController
         requestViewController.delegate        = self
         
         // Configure the Workout Table VC

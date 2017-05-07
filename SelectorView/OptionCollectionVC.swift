@@ -27,7 +27,7 @@ class OptionCollectionVC: UICollectionViewController {
     // Function: init                                                                                                                 //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    init(collectionViewLayout layout: UICollectionViewLayout, inout options: [WorkoutOptionData]) {
+    init(collectionViewLayout layout: UICollectionViewLayout, options: [WorkoutOptionData]) {
         super.init(collectionViewLayout: layout)
         
         self.collectionView!.registerClass(WorkoutOptionCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -208,20 +208,11 @@ class OptionCollectionVC: UICollectionViewController {
         
         let collectionView = scrollView as! UICollectionView
         
-        if let selectedIndex: NSIndexPath = self.getSelectedIndexPath(collectionView) {
+        if let selectedIndex: NSIndexPath = self.getSelectedIndexPath() {
             self.deselectItem(collectionView, indexPath: selectedIndex)
         }
     }
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Function: scrollView: WillBeginDecelerating
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
-        //print("scroll view will begin decelerating")
-    }
-    
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // Function: scrollView: DidEndScrollingAnimation
@@ -231,7 +222,7 @@ class OptionCollectionVC: UICollectionViewController {
         print("Scroll View Did End Scrolling Animation")
         let collectionView = scrollView as! UICollectionView
         
-        if let selectedIndex: NSIndexPath = self.getSelectedIndexPath(collectionView) {
+        if let selectedIndex: NSIndexPath = self.getSelectedIndexPath() {
             self.selectItem(collectionView, indexPath: selectedIndex)
         }
     }
@@ -270,7 +261,7 @@ class OptionCollectionVC: UICollectionViewController {
         var shouldSelect = true
         
         //Get the current selection
-        if let currentSelection: NSIndexPath = self.getSelectedIndexPath(collectionView) {
+        if let currentSelection: NSIndexPath = self.getSelectedIndexPath() {
             //The Selected Item is already selected
             if currentSelection.item == indexPath.item {
                 shouldSelect = false
@@ -287,17 +278,17 @@ class OptionCollectionVC: UICollectionViewController {
     // Function: OptionCollectionVC: getSelectedItem
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func getSelectedIndexPath(collectionView: UICollectionView) -> NSIndexPath?
+    func getSelectedIndexPath() -> NSIndexPath?
     {
         var selectedIndexPath: NSIndexPath? = nil
         //Get any selected Index Paths
-        if collectionView.indexPathsForSelectedItems() != nil {
+        if self.collectionView!.indexPathsForSelectedItems() != nil {
             //DEBUG
-            if (collectionView.indexPathsForSelectedItems()!.count > 1) {
+            if (collectionView!.indexPathsForSelectedItems()!.count > 1) {
                 print("ERROR: There should only be one selected item at a time")
             }
             
-            selectedIndexPath = collectionView.indexPathsForSelectedItems()!.first
+            selectedIndexPath = collectionView!.indexPathsForSelectedItems()!.first
         }
         return selectedIndexPath
     }
@@ -314,6 +305,7 @@ class OptionCollectionVC: UICollectionViewController {
         if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath) {
             let workoutOptionCell: WorkoutOptionCell = cell as! WorkoutOptionCell
             workoutOptionCell.select()
+            NSNotificationCenter.defaultCenter().postNotificationName("refresh", object: self)
         }
 
         
@@ -337,8 +329,8 @@ class OptionCollectionVC: UICollectionViewController {
             }
             
             collectionView.deselectItemAtIndexPath(indexPath, animated: false)
+            NSNotificationCenter.defaultCenter().postNotificationName("refresh", object: self)
         }
-
     }
     
     // MARK: MISC Functions
@@ -348,15 +340,14 @@ class OptionCollectionVC: UICollectionViewController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func fooArrayOp(itemsPerPage:Int) {
-        let beginIndex: Int = workoutOptionData.count - itemsPerPage
-        let endIndex  : Int = workoutOptionData.count - 1
+        //let beginIndex: Int = workoutOptionData.count - itemsPerPage
+        //let endIndex  : Int = workoutOptionData.count - 1
         
-        let fooArray: [WorkoutOptionData] = Array(self.workoutOptionData[0...itemsPerPage])
-        let tmpArray: [WorkoutOptionData] = Array(self.workoutOptionData[beginIndex...endIndex])
+        //let fooArray: [WorkoutOptionData] = Array(self.workoutOptionData[0...itemsPerPage])
+        //let tmpArray: [WorkoutOptionData] = Array(self.workoutOptionData[beginIndex...endIndex])
         
-        self.workoutOptionData.insertContentsOf(tmpArray, at: 0)
-        self.workoutOptionData.appendContentsOf(fooArray)
-        
+        //self.workoutOptionData.insertContentsOf(tmpArray, at: 0)
+        //self.workoutOptionData.appendContentsOf(fooArray)
     }
     
     func translateToRealIndex(indexPath: NSIndexPath) ->NSIndexPath {

@@ -29,7 +29,7 @@ class WorkoutOptionVC: UIViewController {
     // Function: init                                                                                                                 //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    init(titleText: String, inout options: [WorkoutOptionData])
+    init(titleText: String, options: [WorkoutOptionData])
     {
         self.titleString = titleText
         self.options     = options
@@ -75,7 +75,7 @@ class WorkoutOptionVC: UIViewController {
         
         // Create and Configure the Collection View
 
-        collectionOption                   = OptionCollectionVC(collectionViewLayout: flowLayout, options: &options)
+        collectionOption                   = OptionCollectionVC(collectionViewLayout: flowLayout, options: options)
         addChildViewController(collectionOption)
         collectionOptionView               = collectionOption.collectionView
         
