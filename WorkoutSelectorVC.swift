@@ -197,6 +197,19 @@ class WorkoutSelectorVC: UIViewController {
             selector: "refreshDifficultyOption:",
             name:"refresh",
             object: self.levelOptionController.collectionOption)
+        
+        var array: [Int] = [1,2,3,4,5]
+        var subArray = [Int] ()
+        
+        var i: Int  = 0
+        while i < 2 {
+            subArray.append(array.first!)
+            array.removeFirst()
+            ++i
+        }
+        
+        print("Array: \(array)" )
+        print("Sub Array: \(subArray)")
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

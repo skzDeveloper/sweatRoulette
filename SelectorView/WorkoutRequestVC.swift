@@ -13,6 +13,8 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     var indicator       : UIActivityIndicatorView! = nil
     var workoutTable    : WorkoutTableVC?
     var workoutSelector : WorkoutSelectorVC?
+    var cache           : ExerciseCache = ExerciseCache()
+    var section         : String?
     var delegate        : WorkoutSelectorVCDelegate?
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,11 +72,8 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
         
         view.addConstraint(NSLayoutConstraint(item: indicator, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1, constant: 0))
         
-        let sectionTitle :String = self.workoutSelector!.getSectionString()
-        let requestString:String = self.workoutSelector!.getRequestString()
-        
-        print("Section Title : \(sectionTitle)")
-        print("Request String: \(requestString)")
+        self.section = self.workoutSelector!.getSectionString()
+        self.cache.setRequestString(self.section!, request: self.workoutSelector!.getRequestString())
         
         
         loadData()
@@ -113,9 +112,13 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
             }
             
             // This will be replaced by loading a prasing XML data
-            //cacheItem.exerciseList += self.getCannedData()
             //self.workoutCache.updateValue(cacheItem, forKey: muscle)
             //NSNotificationCenter.defaultCenter().postNotificationName(handlerString, object: self, userInfo: info)
+            if let cacheSection: ExerciseCacheItem = self.cache.getCacheSection(self.section!)
+            {
+                print("The cache has \(cacheSection.exerciseList.count) Items!!")
+            }
+            self.setRoutine(self.section!)
             self.navigationController?.pushViewController(self.workoutTable!, animated: false)
             
         } // end completion block
@@ -177,13 +180,33 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
                     print("Unknown Attribute")
                 }
             }// end for loop
-            //let ex: Exercise = Exercise(exName: name!, exHyperlink: hyperlink!, exSets: sets!, exReps: reps!)
-            //addExerciseToCache(bodyPart!, erercise: ex)
+            let ex: ExerciseData = ExerciseData(exName: name!, exHyperlink: hyperlink!, exSets: sets!, exReps: reps!)
+            self.cache.addToCache(self.section!, exercise: ex)
         }
             // Handle Unexpected Element
         else {
             print("unexpeced element: \(elementName)")
         }
+    }
+    
+    
+    
+    func setRoutine(sectionTitle: String) {
+        if let section : ExerciseCacheItem = self.cache.getCacheSection(sectionTitle) {
+            print("We got the cache item ok")
+            if let routineExerices:[ExerciseData] = self.cache.getRoutineDataFromCache(sectionTitle) {
+                print("Got the routine data from the cache")
+                self.workoutTable!.workout.addExercises(sectionTitle, routineExercieses: routineExerices)
+            }
+        }
+        
+        
+//        \\if self.cache.isLoadNeeded(section) {
+//            
+//        \\}
+//        \\else {
+//        \\    self.workoutTable?.workout.getRoutine(section)
+//        \\}
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

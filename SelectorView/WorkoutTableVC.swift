@@ -18,9 +18,33 @@ class WorkoutTableVC: UITableViewController {
     var workout:Workout = NSEntityDescription.insertNewObjectForEntityForName("Workout",
         inManagedObjectContext: LocalDatabaseController.managedObjectContext) as! Workout
     
-    
     let cellID:          String = "ExerciseCell"
     let routineHeaderID: String = "RoutineHeaderCell"
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: init                                                                                                                 //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override init(style: UITableViewStyle) {
+
+        //Set up the Workout Data Model
+        workout.date     = nil
+        workout.title    = "My Workout"
+        workout.routines = NSSet()
+        
+        //Call UIViewControllers designated class
+        super.init(style: style)
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: init                                                                                                                 //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
 
     // MARK: - UI Configuration
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,12 +81,6 @@ class WorkoutTableVC: UITableViewController {
         // Register Routine Header and Exercise Cells
         tableView.registerClass(RoutineHeaderCell.self, forCellReuseIdentifier: routineHeaderID)
         tableView.registerClass(ExerciseCell.self     , forCellReuseIdentifier: cellID)
-        
-        //Set up the Workout Data Model
-        workout.date  = nil
-        workout.title = "My Workout"
-        workout.routines = NSSet()
-        
 
         // Set the Workout Table Header
         let hv: UIView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
@@ -148,6 +166,18 @@ class WorkoutTableVC: UITableViewController {
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
+    // Function: viewWillAppear                                                                                                       //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func viewWillAppear(animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        
+        self.tableView.reloadData()
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
     // Function: slideNavigation                                                                                                      //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,8 +193,8 @@ class WorkoutTableVC: UITableViewController {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        return workoutModel.routines.count
-        return 1
+       return self.workout.routines!.count
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,8 +203,18 @@ class WorkoutTableVC: UITableViewController {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return workoutModel.routines[section].exerciseList.count
-        return 4
+        var numberOfRows : Int  = 0
+        
+        if let routineSet : NSSet = self.workout.routines {
+            var routines = routineSet.allObjects as! [Routine]
+            
+            if let exerciseSet:NSSet = routines[section].exercises
+            {
+                numberOfRows = exerciseSet.count
+            }
+        }
+        
+        return numberOfRows
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,12 +226,23 @@ class WorkoutTableVC: UITableViewController {
         
         let cell: ExerciseCell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! ExerciseCell
         
-//        cell.exNameLabel.text  = workoutModel.routines[indexPath.section].exerciseList[indexPath.row].name
-//        cell.exerciseHyperlink = workoutModel.routines[indexPath.section].exerciseList[indexPath.row].hyperlink
-//        cell.exSetsLabel.text  = "Sets: " + workoutModel.routines[indexPath.section].exerciseList[indexPath.row].sets
-//        cell.exRepsLabel.text  = "Reps: " + workoutModel.routines[indexPath.section].exerciseList[indexPath.row].reps
-        cell.layoutMargins     = UIEdgeInsetsZero
-        
+        if let routineSet : NSSet = self.workout.routines {
+            let routines = routineSet.allObjects as! [Routine]
+            let routine  = routines [indexPath.section]
+            
+            if let exerciseSet:NSSet = routine.exercises
+            {
+                let exercises = exerciseSet.allObjects as! [Exercise]
+                let exercise  = exercises [indexPath.row]
+                
+                cell.exNameLabel.text  = exercise.name
+                cell.exerciseHyperlink = exercise.hyperlink
+                cell.exSetsLabel.text  = exercise.sets
+                cell.exRepsLabel.text  = exercise.reps
+                cell.layoutMargins     = UIEdgeInsetsZero
+            }
+        }
+
         return cell
     }
     
@@ -204,8 +255,11 @@ class WorkoutTableVC: UITableViewController {
         
         let sectionHeader: RoutineHeaderCell = tableView.dequeueReusableCellWithIdentifier(routineHeaderID) as! RoutineHeaderCell
         
- //       sectionHeader.sectionTitle.text = workoutModel.routines[section].forMuscle + " Routines"
-        
+        if let set : NSSet = self.workout.routines {
+            if let routines:[Routine] = set.allObjects as? [Routine] {
+                sectionHeader.sectionTitle.text = routines[section].name! + " Routines"//workoutModel.routines[section].forMuscle + " Routines"
+            }
+        }
         return sectionHeader
     }
     

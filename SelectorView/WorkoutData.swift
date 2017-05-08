@@ -31,22 +31,22 @@ struct WorkoutOptionData {
 // Struct: Exercise                                                                                                               //
 //                                                                                                                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//struct Exercise
-//{
-//    var name     : String
-//    var hyperlink: String
-//    var sets     : String
-//    var reps     : String
-//    
-//    init(exName: String, exHyperlink: String, exSets: String , exReps: String)
-//    {
-//        name      = exName
-//        hyperlink = exHyperlink
-//        sets      = exSets
-//        reps      = exReps
-//    }
-//    
-//}
+struct ExerciseData
+{
+    var name     : String
+    var hyperlink: String
+    var sets     : String
+    var reps     : String
+    
+    init(exName: String, exHyperlink: String, exSets: String , exReps: String)
+    {
+        name      = exName
+        hyperlink = exHyperlink
+        sets      = exSets
+        reps      = exReps
+    }
+    
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                //
@@ -66,24 +66,131 @@ struct WorkoutOptionData {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                //
-// Class: WorkoutSectionCacheItem                                                                                                 //
+// Class: ExerciseCacheItem                                                                                                       //
 //                                                                                                                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class WorkoutSectionCacheItem {
+class ExerciseCacheItem {
+    var section       : String
     var requestString : String!
-    var exerciseList: [Exercise]
+    var exerciseList: [ExerciseData]
     
-    init()
+    init(section: String)
     {
-        requestString = nil
-        exerciseList = [Exercise] ()
+        self.section       = section
+        self.requestString = nil
+        self.exerciseList  = [ExerciseData] ()
     }
 }
 
-enum RequestType
-{
-    case Block, Single
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                                //
+// Class: WorkoutSectionCacheItem                                                                                                 //
+//                                                                                                                                //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class ExerciseCache {
+    var cacheItems : [ExerciseCacheItem]
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: ExerciseCache - init                                                                                                 //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    init()
+    {
+        self.cacheItems = [ExerciseCacheItem] ()
+        self.cacheItems.append(ExerciseCacheItem(section:"Abs"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Back"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Biceps"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Calves"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Chest"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Forearms"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Glutes"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Hamstrings"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Lats"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Quads"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Shoulders"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Traps"))
+        self.cacheItems.append(ExerciseCacheItem(section:"Triceps"))
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: ExerciseCache - getCacheSection                                                                                      //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func getCacheSection(section: String) -> ExerciseCacheItem? {
+        
+        for cacheItem in cacheItems {
+            if cacheItem.section == section {
+                return cacheItem
+            }
+        }
+        return nil
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: ExerciseCache - setRequestString                                                                                     //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func setRequestString(section: String, request: String) {
+        if let cacheSection: ExerciseCacheItem = self.getCacheSection(section) {
+            cacheSection.requestString = request
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: ExerciseCache - isLoadNeeded                                                                                         //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func isLoadNeeded(section: String) -> Bool{
+        var loadNeeded = false
+        
+        if let cacheSection: ExerciseCacheItem = self.getCacheSection(section) {
+            if cacheSection.exerciseList.count < 4 {
+                loadNeeded = true
+            }
+        }
+        return loadNeeded
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: ExerciseCache - addToCache                                                                                           //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func addToCache(section: String, exercise: ExerciseData) {
+        
+        if let cacheSection: ExerciseCacheItem = self.getCacheSection(section) {
+            cacheSection.exerciseList.append(exercise)
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: ExerciseCache - getRoutineDataFromCache                                                                              //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func getRoutineDataFromCache(section: String) -> [ExerciseData]?{
+        var routineData : [ExerciseData]? = nil
+        
+        if let cacheSection: ExerciseCacheItem = self.getCacheSection(section) {
+            if cacheSection.exerciseList.count > 0 {
+                routineData = [ExerciseData]()
+                let resultCount = min(cacheSection.exerciseList.count, 4)
+                
+                var i: Int  = 0
+                while i < resultCount {
+                    routineData!.append(cacheSection.exerciseList.first!)
+                    cacheSection.exerciseList.removeFirst()
+                    ++i
+                }
+            }
+        }
+        return routineData
+    }
+    
+} //End Class
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                //
