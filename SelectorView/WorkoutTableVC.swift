@@ -11,12 +11,13 @@ import CoreData
 
 class WorkoutTableVC: UITableViewController {
     
-    var delegate       :WorkoutSelectorVCDelegate?
-    var routineRequest :WorkoutRequestVC!
+    var delegate : WorkoutSelectorVCDelegate?
+    var request  : WorkoutRequestVC!
     
+    var workout  : Workout = Workout()
     //var workoutModel:Workout = Workout()
-    var workout:Workout = NSEntityDescription.insertNewObjectForEntityForName("Workout",
-        inManagedObjectContext: LocalDatabaseController.managedObjectContext) as! Workout
+    //var workout:Workout = NSEntityDescription.insertNewObjectForEntityForName("Workout",
+        //inManagedObjectContext: LocalDatabaseController.managedObjectContext) as! Workout
     
     let cellID:          String = "ExerciseCell"
     let routineHeaderID: String = "RoutineHeaderCell"
@@ -29,9 +30,9 @@ class WorkoutTableVC: UITableViewController {
     override init(style: UITableViewStyle) {
 
         //Set up the Workout Data Model
-        workout.date     = nil
-        workout.title    = "My Workout"
-        workout.routines = NSSet()
+        //workout.date     = nil
+        //workout.title    = "My Workout"
+        //workout.routines = NSSet()
         
         //Call UIViewControllers designated class
         super.init(style: style)
@@ -193,8 +194,7 @@ class WorkoutTableVC: UITableViewController {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-       return self.workout.routines!.count
-
+       return self.workout.routines.count
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,18 +203,8 @@ class WorkoutTableVC: UITableViewController {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var numberOfRows : Int  = 0
         
-        if let routineSet : NSSet = self.workout.routines {
-            var routines = routineSet.allObjects as! [Routine]
-            
-            if let exerciseSet:NSSet = routines[section].exercises
-            {
-                numberOfRows = exerciseSet.count
-            }
-        }
-        
-        return numberOfRows
+        return self.workout.routines[section].exercises.count
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,24 +214,15 @@ class WorkoutTableVC: UITableViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell: ExerciseCell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! ExerciseCell
+        let cell     : ExerciseCell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! ExerciseCell
+        let routine  : Routine      = self.workout.routines[indexPath.section]
+        let exercise : Exercise     = routine.exercises[indexPath.row]
         
-        if let routineSet : NSSet = self.workout.routines {
-            let routines = routineSet.allObjects as! [Routine]
-            let routine  = routines [indexPath.section]
-            
-            if let exerciseSet:NSSet = routine.exercises
-            {
-                let exercises = exerciseSet.allObjects as! [Exercise]
-                let exercise  = exercises [indexPath.row]
-                
-                cell.exNameLabel.text  = exercise.name
-                cell.exerciseHyperlink = exercise.hyperlink
-                cell.exSetsLabel.text  = exercise.sets
-                cell.exRepsLabel.text  = exercise.reps
-                cell.layoutMargins     = UIEdgeInsetsZero
-            }
-        }
+        cell.exNameLabel.text  = exercise.name
+        cell.exerciseHyperlink = exercise.hyperlink
+        cell.exSetsLabel.text  = exercise.sets
+        cell.exRepsLabel.text  = exercise.reps
+        cell.layoutMargins     = UIEdgeInsetsZero
 
         return cell
     }
@@ -254,12 +235,10 @@ class WorkoutTableVC: UITableViewController {
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let sectionHeader: RoutineHeaderCell = tableView.dequeueReusableCellWithIdentifier(routineHeaderID) as! RoutineHeaderCell
-        
-        if let set : NSSet = self.workout.routines {
-            if let routines:[Routine] = set.allObjects as? [Routine] {
-                sectionHeader.sectionTitle.text = routines[section].name! + " Routines"//workoutModel.routines[section].forMuscle + " Routines"
-            }
-        }
+        let routine      : Routine           = self.workout.routines[section]
+
+        sectionHeader.sectionTitle.text = routine.sectionTitle + " Routines"
+   
         return sectionHeader
     }
     
@@ -299,21 +278,21 @@ class WorkoutTableVC: UITableViewController {
     {
         let deleteClosure = { (action: UITableViewRowAction!, indexPath: NSIndexPath!) -> Void in
             // Handle Deletion of Exercise
-            //self.theRealWorkout.routines[indexPath.section].exerciseList.removeAtIndex(indexPath.row)
-            //self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
+            self.workout.routines[indexPath.section].exercises.removeAtIndex(indexPath.row)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
         }
         
         let switchClosure = { (action: UITableViewRowAction!, indexPath: NSIndexPath!) -> Void in
             // Handle Switching out an Exercise
-            // Need to code for activity indicator animation
-            //self.workoutRequest.switchExercise(self.theRealWorkout.routines[indexPath.section].forMuscle, section: indexPath.section ,row: indexPath.row)
-            //let workout = self.workoutRequest.getExercise("Chest")
+            let routine : Routine = self.workout.routines[indexPath.section]
+            self.request.switchExercise(routine.sectionTitle, indexPath: indexPath)
         }
         
         let addClosure = { (action: UITableViewRowAction!, indexPath: NSIndexPath!) -> Void in
             // Handle Adding of an Exercise
-            // Need to code for activity indicator animation
-            //self.workoutRequest.addExercise(self.theRealWorkout.routines[indexPath.section].forMuscle, section: indexPath.section ,row: indexPath.row+1)
+            let routine : Routine     = self.workout.routines[indexPath.section]
+            let path    : NSIndexPath = NSIndexPath(forRow: indexPath.row + 1, inSection: indexPath.section)
+            self.request.addExercise(routine.sectionTitle, indexPath: path)
         }
         
         let deleteAction = UITableViewRowAction(style: .Default, title: "Delete", handler: deleteClosure)
@@ -328,6 +307,22 @@ class WorkoutTableVC: UITableViewController {
         return [deleteAction, switchAction, addAction]
     }
     
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                 //
+    // Function: accessoryButtonTappedForRowWithIndexPath                                                                              //
+    //                                                                                                                                 //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+        let exercise: Exercise = self.workout.routines[indexPath.section].exercises[indexPath.row]
+        
+        if let requestUrl = NSURL(string: exercise.hyperlink) {
+            UIApplication.sharedApplication().openURL(requestUrl)
+        }
+        else {
+            print("could not open the hyperlink")
+        }
+    }
+
     // MARK: - Table Footer Button Handlers
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                 //
@@ -336,14 +331,14 @@ class WorkoutTableVC: UITableViewController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func deleteButtonHandler(sender: UIButton)
     {
-//        for var section in theRealWorkout.routines {
-//            section.exerciseList.removeAll()
-//        }
-//        
-//        theRealWorkout.routines.removeAll()
-//        
-//        self.tableView.reloadData()
-//        self.navigationController?.popToRootViewControllerAnimated(true)
+        for  routine: Routine in self.workout.routines {
+            routine.exercises.removeAll()
+        }
+        
+        self.workout.routines.removeAll()
+        
+        self.tableView.reloadData()
+        self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

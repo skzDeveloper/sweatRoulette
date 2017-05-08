@@ -50,22 +50,6 @@ struct ExerciseData
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                //
-// Struct: Routine                                                                                                                //
-//                                                                                                                                //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//struct Routine {
-//    var forMuscle   : String
-//    var exerciseList: [Exercise]
-//    
-//    init(routineForMuscle: String)
-//    {
-//        forMuscle    = routineForMuscle
-//        exerciseList = [Exercise] ()
-//    }
-//}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                                                                                                //
 // Class: ExerciseCacheItem                                                                                                       //
 //                                                                                                                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +153,7 @@ class ExerciseCache {
     // Function: ExerciseCache - getRoutineDataFromCache                                                                              //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func getRoutineDataFromCache(section: String) -> [ExerciseData]?{
+    func getRoutineData(section: String) -> [ExerciseData]?{
         var routineData : [ExerciseData]? = nil
         
         if let cacheSection: ExerciseCacheItem = self.getCacheSection(section) {
@@ -190,38 +174,112 @@ class ExerciseCache {
     
 } //End Class
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                                //
+// Struct: Exercise                                                                                                               //
+//                                                                                                                                //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class Exercise : NSObject
+{
+    var name     : String
+    var hyperlink: String
+    var sets     : String
+    var reps     : String
+    
+    init(exName: String, exHyperlink: String, exSets: String , exReps: String)
+    {
+        self.name      = exName
+        self.hyperlink = exHyperlink
+        self.sets      = exSets
+        self.reps      = exReps
+    }
+}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                                //
+// Class: Routine                                                                                                                 //
+//                                                                                                                                //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class Routine : NSObject{
+    var sectionTitle : String
+    var exercises    :[Exercise]
+
+    init(sectionTitle: String)
+    {
+        self.sectionTitle = sectionTitle
+        self.exercises    = [Exercise] ()
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                //
 // Class: Workout                                                                                                                 //
 //                                                                                                                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//class Workout: NSObject {
-//    var title    : String = "My Workout"
-//    var routines: [Routine]
-//    
-//    override init() {
-//        routines = [Routine] ()//
-//    }
+class Workout : NSObject {
+    var title    : String  = "My Workout"
+    var date     : NSDate? = nil
+    var routines : [Routine]
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: doesRoutineExist                                                                                                     //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    func doesRoutineExist(muscle: String) -> Int? {
-//        // Loop through Array of sections (Routines)
-//        for (index, ​routine) in routines.enumerate() {
-//            // Check if there is a routine for the mucsle
-//            if ​routine.forMuscle == muscle {
-//                return index
-//            }
-//        }
-//        // A Routine does not exist for the muscle
-//        return nil
- //   }
+    override init() {
+        routines = [Routine] ()
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: Workout - doesSectionExist                                                                                  //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func getRoutine(sectionTitle: String) -> Routine? {
+        for routine in routines {
+            if routine.sectionTitle == sectionTitle {
+                return routine
+            }
+        }
+        return nil
+    }
     
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: Workout - addRoutine                                                                                        //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func addRoutine(sectionTitle: String) {
+        self.routines.append(Routine(sectionTitle: sectionTitle))
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: Workout - addExercises                                                                                      //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func addExercises(sectionTitle: String, routineExercises: [ExerciseData]) {
+        if let routine : Routine = self.getRoutine(sectionTitle) {
+            
+            for exData : ExerciseData in routineExercises {
+                routine.exercises.append(Exercise(
+                    exName      : exData.name,
+                    exHyperlink : exData.hyperlink,
+                    exSets      : exData.sets,
+                    exReps      : exData.reps))
+                
+            }
+        }
+        else {
+            let routine = Routine(sectionTitle: sectionTitle)
+            
+            for exData : ExerciseData in routineExercises {
+                routine.exercises.append(Exercise(
+                    exName      : exData.name,
+                    exHyperlink : exData.hyperlink,
+                    exSets      : exData.sets,
+                    exReps      : exData.reps))
+            }
+            self.routines.append(routine)
+        }
+    }
+}
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
     // Function: addRoutine                                                                                                           //

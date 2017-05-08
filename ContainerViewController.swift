@@ -42,7 +42,7 @@ class ContainerViewController: UIViewController {
         
         // Configure the Workout Table VC
         workoutTableController.delegate       = self
-        workoutTableController.routineRequest = self.requestViewController
+        workoutTableController.request        = self.requestViewController
         
         // Configure the Workout Archive VC
         archiveViewController.delegate        = self
