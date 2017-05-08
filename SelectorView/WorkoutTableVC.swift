@@ -7,13 +7,17 @@
 //
 
 import UIKit
+import CoreData
 
 class WorkoutTableVC: UITableViewController {
     
     var delegate       :WorkoutSelectorVCDelegate?
     var routineRequest :WorkoutRequestVC!
     
-    var workoutModel:Workout = Workout()
+    //var workoutModel:Workout = Workout()
+    var workout:Workout = NSEntityDescription.insertNewObjectForEntityForName("Workout",
+        inManagedObjectContext: LocalDatabaseController.managedObjectContext) as! Workout
+    
     
     let cellID:          String = "ExerciseCell"
     let routineHeaderID: String = "RoutineHeaderCell"
@@ -45,10 +49,7 @@ class WorkoutTableVC: UITableViewController {
         self.navigationItem.leftBarButtonItem = leftItem
         
         self.view.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
-        
-        //tableView.separatorColor = UIColor.blackColor()
-        //tableView.separatorEffect = UIVisualEffect.
-        //tableView.separatorInset = UIEdgeInsetsMake(15.0, 15.0, 15.0, 15.0)
+
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins  = UIEdgeInsetsZero
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
@@ -58,37 +59,17 @@ class WorkoutTableVC: UITableViewController {
         tableView.registerClass(ExerciseCell.self     , forCellReuseIdentifier: cellID)
         
         //Set up the Workout Data Model
-        workoutModel.title = "Chest and Back Workout"
+        workout.date  = nil
+        workout.title = "My Workout"
+        workout.routines = NSSet()
         
-        var r1:Routine = Routine(routineForMuscle: "Chest")
-        let ex1:Exercise = Exercise(exName: "Push-Ups"   , exHyperlink: "Fake.com", exSets: "4", exReps: "12")
-        let ex2:Exercise = Exercise(exName: "Pull-Ups"   , exHyperlink: "Fake.com", exSets: "4", exReps: "12")
-        let ex3:Exercise = Exercise(exName: "Bench Press", exHyperlink: "Fake.com", exSets: "4", exReps: "12")
-        let ex4:Exercise = Exercise(exName: "Flyes"      , exHyperlink: "Fake.com", exSets: "4", exReps: "12")
-        r1.exerciseList.append(ex1)
-        r1.exerciseList.append(ex2)
-        r1.exerciseList.append(ex3)
-        r1.exerciseList.append(ex4)
-        
-        var r2:Routine = Routine(routineForMuscle: "Back")
-        let ex5:Exercise = Exercise(exName: "Lat Pulldowns"   , exHyperlink: "Fake.com", exSets: "4", exReps: "12")
-        let ex6:Exercise = Exercise(exName: "Rows"   , exHyperlink: "Fake.com", exSets: "4", exReps: "12")
-        let ex7:Exercise = Exercise(exName: "Good Mornings", exHyperlink: "Fake.com", exSets: "4", exReps: "12")
-        let ex8:Exercise = Exercise(exName: "Flyes"      , exHyperlink: "Fake.com", exSets: "4", exReps: "12")
-        r2.exerciseList.append(ex5)
-        r2.exerciseList.append(ex6)
-        r2.exerciseList.append(ex7)
-        r2.exerciseList.append(ex8)
-        
-        workoutModel.routines.append(r1)
-        workoutModel.routines.append(r2)
-        
+
         // Set the Workout Table Header
         let hv: UIView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
         //hv.backgroundColor = UIColor.yellowColor()
         let hLabel: UILabel = UILabel(frame: CGRectInset(hv.bounds, 5, 5))
         //hLabel.backgroundColor = UIColor.whiteColor()
-        hLabel.text = workoutModel.title
+        hLabel.text = workout.title
         hLabel.textAlignment = .Center
         hLabel.textColor = UIColor(colorLiteralRed: 0.0, green: 0.68, blue: 0.94, alpha: 1.0)
         hv.addSubview(hLabel)
@@ -182,7 +163,8 @@ class WorkoutTableVC: UITableViewController {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return workoutModel.routines.count
+//        return workoutModel.routines.count
+        return 1
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +173,8 @@ class WorkoutTableVC: UITableViewController {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return workoutModel.routines[section].exerciseList.count
+//        return workoutModel.routines[section].exerciseList.count
+        return 4
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,10 +186,10 @@ class WorkoutTableVC: UITableViewController {
         
         let cell: ExerciseCell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! ExerciseCell
         
-        cell.exNameLabel.text  = workoutModel.routines[indexPath.section].exerciseList[indexPath.row].name
-        cell.exerciseHyperlink = workoutModel.routines[indexPath.section].exerciseList[indexPath.row].hyperlink
-        cell.exSetsLabel.text  = "Sets: " + workoutModel.routines[indexPath.section].exerciseList[indexPath.row].sets
-        cell.exRepsLabel.text  = "Reps: " + workoutModel.routines[indexPath.section].exerciseList[indexPath.row].reps
+//        cell.exNameLabel.text  = workoutModel.routines[indexPath.section].exerciseList[indexPath.row].name
+//        cell.exerciseHyperlink = workoutModel.routines[indexPath.section].exerciseList[indexPath.row].hyperlink
+//        cell.exSetsLabel.text  = "Sets: " + workoutModel.routines[indexPath.section].exerciseList[indexPath.row].sets
+//        cell.exRepsLabel.text  = "Reps: " + workoutModel.routines[indexPath.section].exerciseList[indexPath.row].reps
         cell.layoutMargins     = UIEdgeInsetsZero
         
         return cell
@@ -221,7 +204,7 @@ class WorkoutTableVC: UITableViewController {
         
         let sectionHeader: RoutineHeaderCell = tableView.dequeueReusableCellWithIdentifier(routineHeaderID) as! RoutineHeaderCell
         
-        sectionHeader.sectionTitle.text = workoutModel.routines[section].forMuscle + " Routines"
+ //       sectionHeader.sectionTitle.text = workoutModel.routines[section].forMuscle + " Routines"
         
         return sectionHeader
     }
@@ -251,6 +234,44 @@ class WorkoutTableVC: UITableViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.0
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                 //
+    // Function: editActionsForRowAtIndexPath                                                                                          //
+    //                                                                                                                                 //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]?
+    {
+        let deleteClosure = { (action: UITableViewRowAction!, indexPath: NSIndexPath!) -> Void in
+            // Handle Deletion of Exercise
+            //self.theRealWorkout.routines[indexPath.section].exerciseList.removeAtIndex(indexPath.row)
+            //self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
+        }
+        
+        let switchClosure = { (action: UITableViewRowAction!, indexPath: NSIndexPath!) -> Void in
+            // Handle Switching out an Exercise
+            // Need to code for activity indicator animation
+            //self.workoutRequest.switchExercise(self.theRealWorkout.routines[indexPath.section].forMuscle, section: indexPath.section ,row: indexPath.row)
+            //let workout = self.workoutRequest.getExercise("Chest")
+        }
+        
+        let addClosure = { (action: UITableViewRowAction!, indexPath: NSIndexPath!) -> Void in
+            // Handle Adding of an Exercise
+            // Need to code for activity indicator animation
+            //self.workoutRequest.addExercise(self.theRealWorkout.routines[indexPath.section].forMuscle, section: indexPath.section ,row: indexPath.row+1)
+        }
+        
+        let deleteAction = UITableViewRowAction(style: .Default, title: "Delete", handler: deleteClosure)
+        deleteAction.backgroundColor = UIColor.redColor()
+        
+        let switchAction = UITableViewRowAction(style: .Default, title: "Switch", handler: switchClosure)
+        switchAction.backgroundColor = UIColor.orangeColor()
+        
+        let addAction = UITableViewRowAction(style: .Default, title: "  Add  ", handler: addClosure)
+        addAction.backgroundColor = UIColor.lightGrayColor()
+        
+        return [deleteAction, switchAction, addAction]
     }
     
     // MARK: - Table Footer Button Handlers

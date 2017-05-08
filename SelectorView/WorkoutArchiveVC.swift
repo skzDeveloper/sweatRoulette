@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class WorkoutArchiveVC: UITableViewController {
     
@@ -56,6 +57,31 @@ class WorkoutArchiveVC: UITableViewController {
         
         tableView.registerClass(ArchiveCell.self, forCellReuseIdentifier: archiveCellID)
 
+    }
+    
+    override func viewWillAppear(animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        print("Archive View: viewWillAppear")
+        
+        let fetchRequest:NSFetchRequest = Workout.fetchRequest()
+        
+        do {
+            let serchResults = try LocalDatabaseController.managedObjectContext.executeFetchRequest(fetchRequest)
+            
+            print("There are \(serchResults.count) saved workouts")
+            
+            for result in serchResults as! [Workout] {
+                if let title = result.title {
+                  print("Workout Title is \(title)")
+                }
+                
+            }
+        }
+        catch
+        {
+            print("The Fetch Failed")
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

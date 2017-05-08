@@ -70,7 +70,12 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
         
         view.addConstraint(NSLayoutConstraint(item: indicator, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1, constant: 0))
         
-        navigationController?.pushViewController(workoutTable!, animated: false)
+        let sectionTitle :String = self.workoutSelector!.getSectionString()
+        let requestString:String = self.workoutSelector!.getRequestString()
+        
+        print("Section Title : \(sectionTitle)")
+        print("Request String: \(requestString)")
+        
         
         loadData()
         
@@ -111,6 +116,7 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
             //cacheItem.exerciseList += self.getCannedData()
             //self.workoutCache.updateValue(cacheItem, forKey: muscle)
             //NSNotificationCenter.defaultCenter().postNotificationName(handlerString, object: self, userInfo: info)
+            self.navigationController?.pushViewController(self.workoutTable!, animated: false)
             
         } // end completion block
         
@@ -171,7 +177,7 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
                     print("Unknown Attribute")
                 }
             }// end for loop
-            let ex: Exercise = Exercise(exName: name!, exHyperlink: hyperlink!, exSets: sets!, exReps: reps!)
+            //let ex: Exercise = Exercise(exName: name!, exHyperlink: hyperlink!, exSets: sets!, exReps: reps!)
             //addExerciseToCache(bodyPart!, erercise: ex)
         }
             // Handle Unexpected Element

@@ -37,7 +37,6 @@ class OptionCollectionVC: UICollectionViewController {
         self.workoutOptionData = options
     }
     
-    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
     // Function: init                                                                                                                 //
@@ -63,13 +62,6 @@ class OptionCollectionVC: UICollectionViewController {
 
         // Register cell classes
         self.collectionView!.registerClass(WorkoutOptionCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
-        //Debug
-//        /let idx : NSIndexPath = NSIndexPath(forItem: 2, inSection: 0)
-        //self.collectionView?.selectItemAtIndexPath(idx, animated: false, scrollPosition: UICollectionViewScrollPosition.CenteredHorizontally)
-        //self.collectionView(self.collectionView!, didSelectItemAtIndexPath: idx)
-
     }
 
     // MARK: UICollectionViewDataSource
@@ -108,7 +100,6 @@ class OptionCollectionVC: UICollectionViewController {
         
         return cell!
     }
-    
     
     // MARK: UIScrollViewDelegate
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

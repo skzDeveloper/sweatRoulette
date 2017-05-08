@@ -265,7 +265,6 @@ class WorkoutSelectorVC: UIViewController {
         // Get Workout
         else
         {
-            print("The request: \(getRequestString())")
             self.navigationController?.pushViewController(request!, animated: true)
         }
     }
@@ -322,12 +321,11 @@ class WorkoutSelectorVC: UIViewController {
         else {
             button.setTitle("SPIN", forState: .Normal)
         }
-        
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
-    // Function: WorkoutSelectorVC: setRoutineRequestOptions                                                                 //
+    // Function: WorkoutSelectorVC: getRequestString                                                                         //
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func getRequestString() -> String
@@ -339,6 +337,19 @@ class WorkoutSelectorVC: UIViewController {
                 "intensity=\(difficultyOptions[difficultySelection!.item].paramName)"
         
         return request
+        
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: WorkoutSelectorVC: getSectionString                                                                         //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func getSectionString() -> String
+    {
+        let sectionString: String = muscleGroupOptions[muscleGroupSelection!.item].labelName
+        
+        return sectionString
         
     }
     

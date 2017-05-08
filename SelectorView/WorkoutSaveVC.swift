@@ -222,7 +222,7 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func saveButtonPressed(sender: UIButton) {
-        //print("Save Button Pressed")
-        //self.navigationController?.pushViewController(request!, animated: true)
+        print("Save Button Pressed")
+        LocalDatabaseController.saveContext()
     }
 }
