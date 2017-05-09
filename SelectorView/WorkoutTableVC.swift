@@ -13,11 +13,7 @@ class WorkoutTableVC: UITableViewController {
     
     var delegate : WorkoutSelectorVCDelegate?
     var request  : WorkoutRequestVC!
-    
     var workout  : Workout = Workout()
-    //var workoutModel:Workout = Workout()
-    //var workout:Workout = NSEntityDescription.insertNewObjectForEntityForName("Workout",
-        //inManagedObjectContext: LocalDatabaseController.managedObjectContext) as! Workout
     
     let cellID:          String = "ExerciseCell"
     let routineHeaderID: String = "RoutineHeaderCell"
@@ -81,7 +77,11 @@ class WorkoutTableVC: UITableViewController {
         
         // Register Routine Header and Exercise Cells
         tableView.registerClass(RoutineHeaderCell.self, forCellReuseIdentifier: routineHeaderID)
-        tableView.registerClass(ExerciseCell.self     , forCellReuseIdentifier: cellID)
+        //tableView.registerClass(ExerciseCell.self     , forCellReuseIdentifier: cellID)
+        
+        //TODO: Change Cells
+        tableView.separatorStyle = .SingleLine
+        tableView.registerNib(UINib(nibName: "ExerciseCell", bundle: nil), forCellReuseIdentifier: "ExerciseCell")
 
         // Set the Workout Table Header
         let hv: UIView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
@@ -176,16 +176,6 @@ class WorkoutTableVC: UITableViewController {
         
         self.tableView.reloadData()
     }
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: slideNavigation                                                                                                      //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func slideNavigation (sender: UIButton) {
-        delegate?.toggleLeftPanel?()
-    }
-
 
     // MARK: - Table view data source
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,7 +203,8 @@ class WorkoutTableVC: UITableViewController {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
+        //TODO: Change the Cells
+      //let cell = tableView.dequeueReusableCellWithIdentifier("CustomCellOne", forIndexPath: indexPath) as! CustomOneCell
         let cell     : ExerciseCell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! ExerciseCell
         let routine  : Routine      = self.workout.routines[indexPath.section]
         let exercise : Exercise     = routine.exercises[indexPath.row]
@@ -256,9 +247,9 @@ class WorkoutTableVC: UITableViewController {
     // Function: heightForRowAtIndexPath                                                                                              //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 80.0
-    }
+//    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        return 80.0
+//    }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
@@ -364,6 +355,7 @@ class WorkoutTableVC: UITableViewController {
     {
         //print("Handle Archive")
         let saveVC = WorkoutSaveVC()
+        saveVC.currentWorkout = self.workout
         
         self.definesPresentationContext = true
         self.providesPresentationContextTransitionStyle = true
@@ -384,6 +376,15 @@ class WorkoutTableVC: UITableViewController {
     func addButtonHandler(sender: UIButton)
     {
         self.navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: slideNavigation                                                                                                      //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func slideNavigation (sender: UIButton) {
+        delegate?.toggleLeftPanel?()
     }
 }
 

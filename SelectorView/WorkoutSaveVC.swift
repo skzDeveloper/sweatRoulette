@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     
@@ -15,6 +16,7 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     var cancelButton    : UIButton!    = nil
     var saveButton      : UIButton!    = nil
     var saveWorkoutLabel: UILabel!     = nil
+    var currentWorkout  : Workout!     = nil
     
     var bottomConstraint: NSLayoutConstraint!
     
@@ -208,6 +210,51 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
+    // Function: saveCurrentWorkout                                                                                                   //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func saveCurrentWorkout() {
+        let appDelegate    : AppDelegate            = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext : NSManagedObjectContext = appDelegate.managedObjectContext
+        //Need to add date
+        
+        let workoutCD:WorkoutCD = NSEntityDescription.insertNewObjectForEntityForName("WorkoutCD",
+        inManagedObjectContext: managedContext) as! WorkoutCD
+        
+        workoutCD.title = self.textField!.text
+        workoutCD.routines = NSSet()
+        var routTemp : [RoutineCD] = [RoutineCD]()
+        
+        for routine : Routine in currentWorkout.routines {
+            //Create Core Data Routine
+            let routineCD:RoutineCD = NSEntityDescription.insertNewObjectForEntityForName("RoutineCD",
+                inManagedObjectContext: managedContext) as! RoutineCD
+            
+            routineCD.name      = routine.sectionTitle
+            routineCD.exercises = NSSet()
+            var exTemp : [ExerciseCD] = [ExerciseCD]()
+            
+            for exercise in routine.exercises {
+                //Create Core Data Exercise
+                let exerciseCD:ExerciseCD = NSEntityDescription.insertNewObjectForEntityForName("ExerciseCD",
+                inManagedObjectContext: managedContext) as! ExerciseCD
+                
+                exerciseCD.name      = exercise.name
+                exerciseCD.hyperlink = exercise.hyperlink
+                exerciseCD.sets      = exercise.sets
+                exerciseCD.reps      = exercise.reps
+                
+                exTemp.append(exerciseCD)
+            } // End Exercise Loop
+            routineCD.exercises = NSSet(array: exTemp)
+            routTemp.append(routineCD)
+        }//End Routine Loop
+        workoutCD.routines = NSSet(array: routTemp)
+        appDelegate.saveContext()
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
     // Function: cancelButtonPressed                                                                                                  //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,7 +269,7 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func saveButtonPressed(sender: UIButton) {
-        print("Save Button Pressed")
-        LocalDatabaseController.saveContext()
+        self.saveCurrentWorkout()
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

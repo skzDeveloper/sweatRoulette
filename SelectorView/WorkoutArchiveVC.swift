@@ -11,7 +11,9 @@ import CoreData
 
 class WorkoutArchiveVC: UITableViewController {
     
-    var delegate: WorkoutSelectorVCDelegate?
+    var delegate : WorkoutSelectorVCDelegate?
+    var rows     : Int      = 0
+    var archives :[String]? = nil
     
     let archiveCellID: String = "ArchiveCell"
 
@@ -55,33 +57,37 @@ class WorkoutArchiveVC: UITableViewController {
         hv.addSubview(hLabel)
         self.tableView.tableHeaderView = hv
         
-        tableView.registerClass(ArchiveCell.self, forCellReuseIdentifier: archiveCellID)
+        tableView.registerNib(UINib(nibName: "ArchiveCell", bundle: nil), forCellReuseIdentifier: "ArchiveCell")
 
     }
     
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
-//        print("Archive View: viewWillAppear")
-//        
-//        let fetchRequest:NSFetchRequest = Workout.fetchRequest()
-//        
-//        do {
-//            let serchResults = try LocalDatabaseController.managedObjectContext.executeFetchRequest(fetchRequest)
-//            
-//            print("There are \(serchResults.count) saved workouts")
-//            
-//            for result in serchResults as! [Workout] {
-//                if let title = result.title {
-//                  print("Workout Title is \(title)")
-//                }
-//                
-//            }
-//        }
-//        catch
-//        {
-//            print("The Fetch Failed")
-//        }
+       
+        let fetchRequest:NSFetchRequest = WorkoutCD.fetchRequest()
+        
+        do {
+            let appDelegate    : AppDelegate            = UIApplication.sharedApplication().delegate as! AppDelegate
+            let managedContext : NSManagedObjectContext = appDelegate.managedObjectContext
+            let serchResults = try managedContext.executeFetchRequest(fetchRequest)
+            
+            self.rows = serchResults.count
+            
+            if self.rows > 1 {
+                self.archives = [String] ()
+                for result in serchResults as! [WorkoutCD] {
+                    self.archives!.append(result.title!)
+                }
+            }
+            else {
+                self.rows = 0
+            }
+        }
+        catch
+        {
+            print("The Fetch Failed")
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +134,7 @@ class WorkoutArchiveVC: UITableViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 3
+        return self.rows
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,6 +146,9 @@ class WorkoutArchiveVC: UITableViewController {
         
         let cell:ArchiveCell = tableView.dequeueReusableCellWithIdentifier(archiveCellID, forIndexPath: indexPath) as! ArchiveCell
         
+        if let archiveArray : [String] = self.archives {
+            cell.archiveTitle.text = archiveArray[indexPath.row]
+        }
         
         return cell
     }
