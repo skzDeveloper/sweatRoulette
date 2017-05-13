@@ -46,6 +46,7 @@ class ContainerViewController: UIViewController {
         
         // Configure the Workout Archive VC
         archiveViewController.delegate        = self
+        archiveViewController.workoutTable    = self.workoutTableController
         
         
         // wrap the centerViewController in a navigation controller, so we can push views to it

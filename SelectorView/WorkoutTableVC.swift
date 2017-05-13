@@ -79,7 +79,6 @@ class WorkoutTableVC: UITableViewController {
         tableView.registerClass(RoutineHeaderCell.self, forCellReuseIdentifier: routineHeaderID)
         //tableView.registerClass(ExerciseCell.self     , forCellReuseIdentifier: cellID)
         
-        //TODO: Change Cells
         tableView.separatorStyle = .SingleLine
         tableView.registerNib(UINib(nibName: "ExerciseCell", bundle: nil), forCellReuseIdentifier: "ExerciseCell")
 
@@ -203,7 +202,6 @@ class WorkoutTableVC: UITableViewController {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        //TODO: Change the Cells
       //let cell = tableView.dequeueReusableCellWithIdentifier("CustomCellOne", forIndexPath: indexPath) as! CustomOneCell
         let cell     : ExerciseCell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! ExerciseCell
         let routine  : Routine      = self.workout.routines[indexPath.section]

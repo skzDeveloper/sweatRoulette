@@ -11,9 +11,9 @@ import CoreData
 
 class WorkoutArchiveVC: UITableViewController {
     
-    var delegate : WorkoutSelectorVCDelegate?
-    var rows     : Int      = 0
-    var archives :[String]? = nil
+    var delegate     : WorkoutSelectorVCDelegate?
+    var workoutTable : WorkoutTableVC!
+    var archives     :[WorkoutCD]  = [WorkoutCD] ()
     
     let archiveCellID: String = "ArchiveCell"
 
@@ -58,51 +58,31 @@ class WorkoutArchiveVC: UITableViewController {
         self.tableView.tableHeaderView = hv
         
         tableView.registerNib(UINib(nibName: "ArchiveCell", bundle: nil), forCellReuseIdentifier: "ArchiveCell")
+        
+        self.setDataSource()
 
     }
-    
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: viewWillAppear                                                                                                       //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
-       
-        let fetchRequest:NSFetchRequest = WorkoutCD.fetchRequest()
         
-        do {
-            let appDelegate    : AppDelegate            = UIApplication.sharedApplication().delegate as! AppDelegate
-            let managedContext : NSManagedObjectContext = appDelegate.managedObjectContext
-            let serchResults = try managedContext.executeFetchRequest(fetchRequest)
-            
-            self.rows = serchResults.count
-            
-            if self.rows > 1 {
-                self.archives = [String] ()
-                for result in serchResults as! [WorkoutCD] {
-                    self.archives!.append(result.title!)
-                }
-            }
-            else {
-                self.rows = 0
-            }
-        }
-        catch
-        {
-            print("The Fetch Failed")
-        }
+        self.setDataSource()
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
     // Function: slideNavigation                                                                                                      //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func slideNavigation (sender: UIButton) {
-        //print("Slide Navigation Time")
-        //delegate?.toggleLeftPanel?()
         if (delegate != nil) {
             delegate?.toggleLeftPanel!()
-        }
-        else {
-            //print("delegate is nil")
         }
     }
 
@@ -134,7 +114,7 @@ class WorkoutArchiveVC: UITableViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return self.rows
+        return self.archives.count
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,11 +126,86 @@ class WorkoutArchiveVC: UITableViewController {
         
         let cell:ArchiveCell = tableView.dequeueReusableCellWithIdentifier(archiveCellID, forIndexPath: indexPath) as! ArchiveCell
         
-        if let archiveArray : [String] = self.archives {
-            cell.archiveTitle.text = archiveArray[indexPath.row]
+        if let archiveArray : [WorkoutCD] = self.archives {
+            cell.archiveTitle.text = archiveArray[indexPath.row].title
         }
         
         return cell
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                 //
+    // Function: accessoryButtonTappedForRowWithIndexPath                                                                              //
+    //                                                                                                                                 //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+        print("Open Archive Button Pressed")
+        let archivedWorkout : WorkoutCD = self.archives[indexPath.row]
+        let newWorkout      : Workout = Workout()
+        
+        newWorkout.title = archivedWorkout.title!
+        //TODO: Need to do the date
 
+        let archivedRoutines : [RoutineCD] = archivedWorkout.routines!.allObjects as! [RoutineCD]
+        
+        for archivedRoutine in archivedRoutines {
+            let newRoutine       : Routine      = Routine(sectionTitle: archivedRoutine.name!)
+            let archivedExercises: [ExerciseCD] = archivedRoutine.exercises!.allObjects as! [ExerciseCD]
+            
+            for archivedExercise in archivedExercises {
+                let newExercise: Exercise = Exercise(
+                    exName:      archivedExercise.name!,
+                    exHyperlink: archivedExercise.hyperlink!,
+                    exSets:      archivedExercise.sets!,
+                    exReps:      archivedExercise.reps!)
+                
+                newRoutine.exercises.append(newExercise)
+            } // end for archived exericse
+            newWorkout.routines.append(newRoutine)
+        }
+        self.workoutTable!.workout = newWorkout
+        self.navigationController?.pushViewController(self.workoutTable!, animated: false)
+    }
+  
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                 //
+    // Function: commitEditingStyle                                                                                                    //
+    //                                                                                                                                 //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.Delete) {
+            // Get the Core Data Context
+            let appDelegate    : AppDelegate            = UIApplication.sharedApplication().delegate as! AppDelegate
+            let managedContext : NSManagedObjectContext = appDelegate.managedObjectContext
+            
+            // Delete Workout from Core Data and Table
+            let workoutToDelete : WorkoutCD = self.archives.removeAtIndex(indexPath.row)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
+            
+            managedContext.deleteObject(workoutToDelete)
+            appDelegate.saveContext()
+            //self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
+        }
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                 //
+    // Function: setDataSource                                                                                                         //
+    //                                                                                                                                 //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func setDataSource() -> Void {
+        let fetchRequest:NSFetchRequest = WorkoutCD.fetchRequest()
+        
+        do {
+            let appDelegate    : AppDelegate            = UIApplication.sharedApplication().delegate as! AppDelegate
+            let managedContext : NSManagedObjectContext = appDelegate.managedObjectContext
+            let searchResults = try managedContext.executeFetchRequest(fetchRequest)
+            
+            self.archives = searchResults as! [WorkoutCD]
+        }
+        catch
+        {
+            print("The Fetch Failed")
+        }
+    }
 }
