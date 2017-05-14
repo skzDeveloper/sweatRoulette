@@ -317,59 +317,49 @@ class OptionCollectionVC: UICollectionViewController {
     }
     
     // MARK: UICollectionView - Scroll Animation
-    /*************************************************************************************************************************************
-    *
-    * Function: collectionView: scrollAnimation
-    *
-    **************************************************************************************************************************************/
-    func scrollAnimation(paramTimer: NSTimer) {
-//        
-//        if(elapsedTime < 30) {
-//            ++elapsedTime
-//            let collectionView = self.collectionView!
-//            collectionView.setContentOffset(CGPointMake(collectionView.contentOffset.x + 1000.0, collectionView.contentOffset.y), animated: true)
-//            //collectionView.contentOffset.x += 1000.0
-//        }
-//        else {
-//            stopScrollAnimation()
-//        }
-        
-    }
-    
-    /*************************************************************************************************************************************
-     *
-     * Function: startScrollAnimation
-     *
-     **************************************************************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Function: OptionCollectionVC: startScrollAnimation
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func startScrollAnimation() {
-//        print("Start Scroll Animation")
-//        
-//        
-//        if let currentlySelectedItem = self.selectedItem {
-//            selectOptionViewCell(currentlySelectedItem, isSelected: false)
-//            self.selectedItem = nil
-//        }
-//        
-//        //self.scrollAnimationTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "scrollAnimation:", userInfo: nil, repeats: true)
-//        self.scrollAnimationTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "newScroll:", userInfo: nil, repeats: true)
+        print("Start Scroll Animation")
+
+        NSTimer.scheduledTimerWithTimeInterval(0.0, target: self, selector: "scrollAnimation:", userInfo: 0, repeats: false)
     }
     
-    /*************************************************************************************************************************************
-     *
-     * Function: collectionView: stopScrollAnimation
-     *
-     **************************************************************************************************************************************/
-    func stopScrollAnimation() {
-//        if let timer = scrollAnimationTimer {
-//            print("Stop Scroll Animation")
-//            self.selectedItem = self.getRandomIndex()
-//            if let idx = self.selectedItem {
-//                self.collectionView!.scrollToItemAtIndexPath(idx, atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: false)
-//            }
-//            timer.invalidate()
-//            elapsedTime = 0
-//            scrollAnimationTimer = nil
-//        }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Function: OptionCollectionVC: scrollAnimation
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func scrollAnimation(paramTimer: NSTimer) -> Void {
+        let collectionView : UICollectionView = self.collectionView!
+        var counter : Int = paramTimer.userInfo as! Int
+        counter += 1
+        
+        if counter < 20
+        {
+            let offsetX        : CGFloat          = collectionView.contentOffset.x
+            let offsetY        : CGFloat          = collectionView.contentOffset.y
+            collectionView.setContentOffset(CGPoint(x: offsetX + 150.0, y: offsetY), animated: true)
+            
+            NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "scrollAnimation:", userInfo: counter, repeats: false)
+        }
+        else {
+            //Get the visible Index Paths
+            if var idxArray : [NSIndexPath] = collectionView.indexPathsForVisibleItems() {
+                // Put the Index Paths in order
+                idxArray.sortInPlace( {$0.item < $1.item } )
+                // Select the middle Index Path
+                let i:Int = idxArray.count/2
+                let selectedIndexPath:NSIndexPath = idxArray[i]
+                
+                collectionView.selectItemAtIndexPath(selectedIndexPath,
+                    animated       : true,
+                    scrollPosition : UICollectionViewScrollPosition.CenteredHorizontally)
+            }
+        }
     }
     
     /*************************************************************************************************************************************
@@ -382,52 +372,5 @@ class OptionCollectionVC: UICollectionViewController {
         let randomItem = Int(arc4random_uniform(UInt32(REAL_ARRAY_ITEM_COUNT))) + 4
         print("random Item \(randomItem)")
         return NSIndexPath(forItem: randomItem, inSection: 0)
-    }
-    
-    /*************************************************************************************************************************************
-     *
-     * Function: setSelectedOpion
-     *
-     **************************************************************************************************************************************/
-    func setSelectedOpion(selectedItem: NSIndexPath?) {
-//        self.selectedItem = selectedItem
-//        
-//        // Signal Observer
-//        NSNotificationCenter.defaultCenter().postNotificationName("refresh", object: self)
-    }
-    
-    /*************************************************************************************************************************************
-     *
-     * Function: selectOptionViewCell
-     *
-     **************************************************************************************************************************************/
-    func selectOptionViewCell(indexPath: NSIndexPath, isSelected: Bool) {
-//        print("Select/Deselect the Option View Cell")
-//        // Get the Cell
-//        if let cell: WorkoutOptionCell = self.collectionView?.cellForItemAtIndexPath(indexPath) as? WorkoutOptionCell {
-//            // Select the Cell
-//            if (isSelected == true) {
-//                print("Select option View Cell: \(indexPath.item)")
-//                cell.select()
-//            }
-//                // Deselect the Cell
-//            else {
-//                print("Deselect option View Cell: \(indexPath.item)")
-//                cell.deselect()
-//            }
-//        }
-    }
-    
-    func newScroll() {
-        //print("New Scroll")
-        //        if(elapsedTime < 30) {
-        //            ++elapsedTime
-        //            let collectionView = self.collectionView!
-        //            collectionView.setContentOffset(CGPointMake(collectionView.contentOffset.x + 1000.0, collectionView.contentOffset.y), animated: true)
-        //            //collectionView.contentOffset.x += 1000.0
-        //        }
-        //        else {
-        //            stopScrollAnimation()
-        //        }
     }
 }

@@ -208,10 +208,7 @@ class WorkoutSelectorVC: UIViewController {
         let VIEW_HEIGHT  : CGFloat = view.bounds.height
         let BUTTON_HEIGHT: CGFloat = VIEW_HEIGHT * 0.12
         let OPTION_HEIGHT: CGFloat = (VIEW_HEIGHT - BUTTON_HEIGHT) / 3
-    
-        //print("view height: \(VIEW_HEIGHT)  option height:\(OPTION_HEIGHT) button height: \(BUTTON_HEIGHT)")
-    
-    
+
         let d = ["b":button,
                  "mo":muscleOptionControler.view,
                  "so":styleOptionControler.view,
@@ -259,8 +256,7 @@ class WorkoutSelectorVC: UIViewController {
         // Not all Options are selected
         if sender.titleForState(.Normal) == "SPIN"
         {
-            // Need to do the spin animation here
-            // spinOptions()
+            self.spinOptions()
         }
         // Get Workout
         else
@@ -324,6 +320,25 @@ class WorkoutSelectorVC: UIViewController {
         }
         else {
             button.setTitle("SPIN", forState: .Normal)
+        }
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: WorkoutSelectorVC: refreshButton                                                                            //
+    //                                                                                                                       //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func spinOptions() -> Void {
+        if self.muscleGroupSelection == nil {
+            self.muscleOptionControler!.collectionOption!.startScrollAnimation()
+        }
+        
+        if self.styleSelection == nil {
+            self.styleOptionControler!.collectionOption!.startScrollAnimation()
+        }
+        
+        if self.difficultySelection == nil {
+            self.levelOptionController!.collectionOption!.startScrollAnimation()
         }
     }
 
