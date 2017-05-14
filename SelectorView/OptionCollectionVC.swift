@@ -15,12 +15,6 @@ class OptionCollectionVC: UICollectionViewController {
     var workoutOptionData:[WorkoutOptionData] = []
     var selectedItem     : NSIndexPath!
     
-//    var SCROLL_CONTENT_WIDTH : CGFloat = self.collectionView!.contentSize.width
-//    var SCROLL_PAGE_WIDTH    : CGFloat = self.collectionView!.bounds.width
-//    
-//    let flowLayout: UICollectionViewFlowLayout = self.collectionViewLayout as! UICollectionViewFlowLayout
-//    let ITEM_WIDTH   :CGFloat = flowLayout.itemSize.width
-    
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
@@ -117,52 +111,26 @@ class OptionCollectionVC: UICollectionViewController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func scrollViewDidScroll(scrollView: UIScrollView) {
-        //print("scroll View Did Scroll to content offsetx \(scrollView.contentOffset.x)")
-        let flowLayout: UICollectionViewFlowLayout = self.collectionViewLayout as! UICollectionViewFlowLayout
-        let SCROLL_CONTENT_WIDTH = self.collectionView!.contentSize.width
-        let SCROLL_PAGE_WIDTH    = self.collectionView!.bounds.width
-        let ITEM_SPACING         = (SCROLL_PAGE_WIDTH * 0.1) / 4
-        let ITEM_WIDTH           = flowLayout.itemSize.width
-        let ITEM_OFFSET          = ITEM_WIDTH + ITEM_SPACING
+        let layout     : UICollectionViewFlowLayout = self.collectionViewLayout as! UICollectionViewFlowLayout
+        let cellOffset : CGFloat                    = layout.minimumLineSpacing + layout.itemSize.width
 
+        let offsetX    : CGFloat = scrollView.contentOffset.x
+        let fakeIndex  : CGFloat = CGFloat(self.workoutOptionData.count - 4)
+        let fakeOffset : CGFloat = cellOffset * fakeIndex
         
-        //print("Scroll Content Width \(SCROLL_CONTENT_WIDTH)")
-        //print("Scroll Page Width \(SCROLL_PAGE_WIDTH)")
-        //print("Item Width \(ITEM_WIDTH)")
+        print("offset x: \(offsetX)")
+        //print("Cell Offset:\(cellOffset)")
         
-//        let FAKE_PAGE_OFFSET:CGFloat  = 400.00
-//        let REAL_SIZE                 = (CGFloat)((workoutOptionData.count - 8) * ITEM_WIDTH)
-//        let END_OF_REAL_ARRAY         = REAL_SIZE + FAKE_PAGE_OFFSET
-//        
-//        
-//        struct PreviousContentOffset {
-//            static var x: CGFloat = 0.0
-//        }
-//        
-//        let scrollOffsetX = scrollView.contentOffset.x
-//        let scrollOffsetY = scrollView.contentOffset.y
-//        
-//        // Handle Scrolling Left Rollover
-//        if (scrollOffsetX >= END_OF_REAL_ARRAY) {
-//            scrollView.contentOffset = CGPointMake(FAKE_PAGE_OFFSET, scrollOffsetY)
-//            self.scrollDirection = ScrollDirection.Left
-//        }
-//            
-//            // Handle Scrolling Right Rollover
-//        else if (scrollOffsetX <= 0) {
-//            scrollView.contentOffset = CGPointMake(REAL_SIZE, scrollOffsetY)
-//            self.scrollDirection = ScrollDirection.Right
-//        }
-//            // Normal Scroll
-//        else {
-//            if (scrollOffsetX > PreviousContentOffset.x) {
-//                self.scrollDirection = ScrollDirection.Left
-//            }
-//            else {
-//                self.scrollDirection = ScrollDirection.Right
-//            }
-//        }
-//        PreviousContentOffset.x = scrollView.contentOffset.x
+        // Handle Scrolling Left Rollover
+        if offsetX >= fakeOffset {
+            let translationX : CGFloat = cellOffset * 4.0
+            scrollView.contentOffset = CGPointMake(translationX, scrollView.contentOffset.y)
+        }
+        
+        else if offsetX < 0.0 {
+            let translationX : CGFloat = cellOffset * CGFloat(self.workoutOptionData.count - 8)
+            scrollView.contentOffset = CGPointMake(translationX, scrollView.contentOffset.y)
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,8 +194,32 @@ class OptionCollectionVC: UICollectionViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         print("Collection View Did Select Item at Index Path \(indexPath.item)")
+        var index             : NSIndexPath = indexPath
+        let item              : Int         = indexPath.item
+        let leftRolloverIndex : Int         = self.workoutOptionData.count - 4
         
-        collectionView.selectItemAtIndexPath(indexPath,
+        // Left Rollover
+        if item >= leftRolloverIndex {
+            let layout      : UICollectionViewFlowLayout = self.collectionViewLayout as! UICollectionViewFlowLayout
+            let cellOffset  : CGFloat    = layout.minimumLineSpacing + layout.itemSize.width
+            let pageXOffset : CGFloat    = collectionView.contentOffset.x  - (cellOffset * CGFloat(leftRolloverIndex))
+            let newXOffset  : CGFloat    = cellOffset * 4.0 + pageXOffset
+            collectionView.contentOffset = CGPointMake(newXOffset, collectionView.contentOffset.y)
+            
+            
+            index = NSIndexPath(forItem: item - (self.workoutOptionData.count - 8), inSection: 0)
+        }
+        // Right Rollover
+        else if item <= 4 {
+            let layout      : UICollectionViewFlowLayout = self.collectionViewLayout as! UICollectionViewFlowLayout
+            let cellOffset  : CGFloat    = layout.minimumLineSpacing + layout.itemSize.width
+            let newXOffset  : CGFloat    = cellOffset * CGFloat(self.workoutOptionData.count - 8) + collectionView.contentOffset.x
+            collectionView.contentOffset = CGPointMake(newXOffset, collectionView.contentOffset.y)
+            
+            index = NSIndexPath(forItem: (self.workoutOptionData.count - 8) + item, inSection: 0)
+        }
+        
+        collectionView.selectItemAtIndexPath(index,
             animated       : true,
             scrollPosition : UICollectionViewScrollPosition.CenteredHorizontally)
     }
@@ -280,6 +272,8 @@ class OptionCollectionVC: UICollectionViewController {
             }
             
             selectedIndexPath = collectionView!.indexPathsForSelectedItems()!.first
+            //Debug
+            print("The selected path is: \(selectedIndexPath?.item)")
         }
         return selectedIndexPath
     }
@@ -290,8 +284,6 @@ class OptionCollectionVC: UICollectionViewController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func selectItem(collectionView: UICollectionView, indexPath: NSIndexPath) -> Void {
-        
-            
         //Highlight the cell
         if let cell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath) {
             let workoutOptionCell: WorkoutOptionCell = cell as! WorkoutOptionCell
@@ -322,55 +314,6 @@ class OptionCollectionVC: UICollectionViewController {
             collectionView.deselectItemAtIndexPath(indexPath, animated: false)
             NSNotificationCenter.defaultCenter().postNotificationName("refresh", object: self)
         }
-    }
-    
-    // MARK: MISC Functions
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Function: add array ele
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func fooArrayOp(itemsPerPage:Int) {
-        //let beginIndex: Int = workoutOptionData.count - itemsPerPage
-        //let endIndex  : Int = workoutOptionData.count - 1
-        
-        //let fooArray: [WorkoutOptionData] = Array(self.workoutOptionData[0...itemsPerPage])
-        //let tmpArray: [WorkoutOptionData] = Array(self.workoutOptionData[beginIndex...endIndex])
-        
-        //self.workoutOptionData.insertContentsOf(tmpArray, at: 0)
-        //self.workoutOptionData.appendContentsOf(fooArray)
-    }
-    
-    func translateToRealIndex(indexPath: NSIndexPath) ->NSIndexPath {
-//        let ITEM_WIDTH:            Int         = 100
-//        let FAKE_PAGE_OFFSET:      CGFloat     = 400.00
-//        let REAL_ARRAY_ITEM_COUNT: Int         = workoutOptionData.count - 8
-//        let REAL_SIZE:             CGFloat     = (CGFloat)(REAL_ARRAY_ITEM_COUNT * ITEM_WIDTH)
-//        let END_OF_REAL_ARRAY:     CGFloat     = REAL_SIZE + FAKE_PAGE_OFFSET
-        let selectedIndexPath:     NSIndexPath = indexPath
-//        
-//        if let collectionView = self.collectionView {
-//            let contentOffsetX: CGFloat = collectionView.contentOffset.x
-//            
-//            // Leading Fake Page Selection
-//            if (indexPath.item < 4) {
-//                print("The selection is in the leading fake page")
-//                //traslate to real array
-//                collectionView.setContentOffset(CGPointMake(contentOffsetX + REAL_SIZE, collectionView.contentOffset.y), animated: false)
-//                selectedIndexPath = NSIndexPath(forItem: (REAL_ARRAY_ITEM_COUNT + indexPath.item), inSection: 0)
-//            }
-//            // Trailing Fake Page Selection
-//            if (indexPath.item >= REAL_ARRAY_ITEM_COUNT + 4) {
-//                print("The selection is in the trailing fake page")
-//                // translate to real array
-//                let trailingOffsetX = contentOffsetX - END_OF_REAL_ARRAY
-//                collectionView.setContentOffset(CGPointMake(trailingOffsetX + FAKE_PAGE_OFFSET, collectionView.contentOffset.y), animated: false)
-//                selectedIndexPath = NSIndexPath(forItem: (indexPath.item - REAL_ARRAY_ITEM_COUNT), inSection: 0)
-//            }
-//            
-//        }
-//        
-        return selectedIndexPath
     }
     
     // MARK: UICollectionView - Scroll Animation

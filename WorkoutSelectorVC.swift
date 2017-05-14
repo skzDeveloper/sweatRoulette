@@ -363,12 +363,8 @@ class WorkoutSelectorVC: UIViewController {
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func slideNavigation (sender: UIButton) {
-        //delegate?.toggleLeftPanel?()
         if (delegate != nil) {
             delegate?.toggleLeftPanel!()
-        }
-        else {
-            //print("delegate is nil")
         }
     }
 }

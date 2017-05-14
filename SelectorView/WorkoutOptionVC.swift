@@ -95,19 +95,37 @@ class WorkoutOptionVC: UIViewController {
         super.viewDidLoad()
         
         // Turn Off Auto-Resizing
-        titleView.translatesAutoresizingMaskIntoConstraints  = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleView.translatesAutoresizingMaskIntoConstraints            = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints           = false
         collectionOptionView.translatesAutoresizingMaskIntoConstraints = false
 
         let d = ["tv":titleView, "l":titleLabel, "cv":collectionOptionView]
 
         // Add Constraints to Title View
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[tv][cv]|" , options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[tv]|"     , options: NSLayoutFormatOptions.AlignAllLeft, metrics: nil, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[cv]|"     , options: NSLayoutFormatOptions.AlignAllLeft, metrics: nil, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[tv][cv]|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
         
-        titleView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-8-[l]-2-|",options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
-        titleView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[l]-8-|",options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[tv]|",
+            options: NSLayoutFormatOptions.AlignAllLeft,
+            metrics: nil,
+            views: d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[cv]|",
+            options: NSLayoutFormatOptions.AlignAllLeft,
+            metrics: nil,
+            views: d))
+        
+        titleView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-8-[l]-2-|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
+        
+        titleView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[l]-8-|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,26 +138,20 @@ class WorkoutOptionVC: UIViewController {
         let VIEW_HEIGHT       = view.bounds.height
         let TITLE_VIEW_HEIGHT = VIEW_HEIGHT * 0.35
         let CELL_HEIGHT       = VIEW_HEIGHT - TITLE_VIEW_HEIGHT - 11
-        let CELL_WIDTH        = CELL_HEIGHT * 0.80//(view.bounds.width * 0.90) / 4.25
+        let CELL_WIDTH        = CELL_HEIGHT * 0.80
         
         //print("VIEW_HEIGHT: \(VIEW_HEIGHT)  VIEW_WIDTH: \(view.bounds.width) TITLE_VIEW_HEIGHT: \(TITLE_VIEW_HEIGHT)")
         
         let d = ["tv":titleView]
         let m = ["tvh": TITLE_VIEW_HEIGHT]
         
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[tv(==tvh)]" , options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[tv(==tvh)]",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: m,
+            views  : d))
         
-        flowLayout.minimumLineSpacing      = (view.bounds.width * 0.10) / 4//2
+        flowLayout.minimumLineSpacing      = (view.bounds.width * 0.10) / 4
         flowLayout.itemSize                = CGSize(width: CELL_WIDTH, height: CELL_HEIGHT)
-        flowLayout.sectionInset            = UIEdgeInsetsMake(5, 0, 5, 0)
         flowLayout.scrollDirection         = .Horizontal
-        
-        self.collectionOption.fooArrayOp(4)
-        
-        print("Flow Layout: min Line Spacing \(flowLayout.minimumLineSpacing) : itemSize \(flowLayout.itemSize.width))")
     }
-    
-
-    
-
 }

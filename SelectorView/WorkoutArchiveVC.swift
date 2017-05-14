@@ -73,6 +73,7 @@ class WorkoutArchiveVC: UITableViewController {
         super.viewWillAppear(animated)
         
         self.setDataSource()
+        self.tableView.reloadData()
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +173,9 @@ class WorkoutArchiveVC: UITableViewController {
     // Function: commitEditingStyle                                                                                                    //
     //                                                                                                                                 //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle,
+        forRowAtIndexPath indexPath:NSIndexPath) {
+            
         if (editingStyle == UITableViewCellEditingStyle.Delete) {
             // Get the Core Data Context
             let appDelegate    : AppDelegate            = UIApplication.sharedApplication().delegate as! AppDelegate
