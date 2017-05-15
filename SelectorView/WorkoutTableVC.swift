@@ -228,7 +228,7 @@ class WorkoutTableVC: UITableViewController {
 
         sectionHeader.sectionTitle.text = routine.sectionTitle + " Routines"
    
-        return sectionHeader
+        return sectionHeader.contentView
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

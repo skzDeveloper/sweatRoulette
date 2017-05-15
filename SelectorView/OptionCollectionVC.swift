@@ -83,7 +83,8 @@ class OptionCollectionVC: UICollectionViewController {
     // Function: cellForItemAtIndexPath
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath)
+        -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as? WorkoutOptionCell
         
         //Configure The cell
