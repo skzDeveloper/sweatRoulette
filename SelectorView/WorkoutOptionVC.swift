@@ -29,8 +29,7 @@ class WorkoutOptionVC: UIViewController {
     // Function: init                                                                                                                 //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    init(titleText: String, options: [WorkoutOptionData])
-    {
+    init(titleText: String, options: [WorkoutOptionData]) {
         self.titleString = titleText
         self.options     = options
 
@@ -84,7 +83,6 @@ class WorkoutOptionVC: UIViewController {
         view.addSubview(titleView)
         view.addSubview(collectionOptionView)
     }
-    
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //

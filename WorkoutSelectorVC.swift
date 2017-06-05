@@ -1,10 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  WorkoutSelectorVC.swift                                                                                                    //
-//  SelectorView                                                                                                     var       //
-//                                                                                                                             //
-//  Created by Saad Omar on 5/17/16.                                                                                           //
-//  Copyright © 2016 Saad Omar. All rights reserved.                                                                           //
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  WorkoutSelectorVC.swift                                                                                                  //
+//  SelectorView                                                                                                             //
+//                                                                                                                           //
+//  Created by Saad Omar on 5/17/16.                                                                                         //
+//  Copyright © 2016 Saad Omar. All rights reserved.                                                                         //
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import UIKit
 
@@ -296,7 +296,7 @@ class WorkoutSelectorVC: UIViewController {
     // Function: WorkoutSelectorVC: refreshStyleOption(notification                                                          //
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func refreshDifficultyOption(notification: NSNotification){
+    func refreshDifficultyOption(notification: NSNotification) {
         
         print("Difficlty Observer Notified")
         self.difficultySelection = self.levelOptionController.collectionOption.getSelectedIndexPath()

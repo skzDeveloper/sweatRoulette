@@ -29,7 +29,6 @@ class WorkoutArchiveVC: UITableViewController {
         self.edgesForExtendedLayout = UIRectEdge.None
         self.navigationController?.navigationBar.translucent = false
         self.navigationController?.navigationBar.barTintColor = UIColor(colorLiteralRed: 0.0, green: 0.20, blue: 0.20, alpha: 1.0)
-        //print("The navigation bar height is \(self.navigationController?.navigationBar.bounds.height)")
         
         //Set the Logo on the navigation bar
         let image = UIImage(named: "SweatRouletteLogo")
@@ -38,6 +37,8 @@ class WorkoutArchiveVC: UITableViewController {
         imageView.contentMode = .ScaleAspectFit
         imageView.image = image
         navigationItem.titleView = imageView
+        
+        self.view.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
         
         //Set Hamburger Icon Button on Right Navigation Bar
         let hamburgerButton: UIButton = UIButton()
@@ -48,14 +49,20 @@ class WorkoutArchiveVC: UITableViewController {
         leftItem.customView = hamburgerButton
         self.navigationItem.leftBarButtonItem = leftItem
         
+        // Header
         let hv: UIView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
         hv.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
         let hLabel: UILabel = UILabel(frame: CGRectInset(hv.bounds, 5, 5))
         hLabel.text = "Archives"
         hLabel.textAlignment = .Center
-        hLabel.textColor = UIColor(colorLiteralRed: 0.0, green: 0.20, blue: 0.20, alpha: 1.0)
+        hLabel.textColor = UIColor(colorLiteralRed: 0.0, green: 0.68, blue: 0.94, alpha: 1.0)
         hv.addSubview(hLabel)
         self.tableView.tableHeaderView = hv
+        
+        // Configure Table View Cell Seperators
+        self.tableView.separatorInset = UIEdgeInsetsZero
+        self.tableView.layoutMargins  = UIEdgeInsetsZero
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         
         tableView.registerNib(UINib(nibName: "ArchiveCell", bundle: nil), forCellReuseIdentifier: "ArchiveCell")
         
@@ -74,17 +81,6 @@ class WorkoutArchiveVC: UITableViewController {
         
         self.setDataSource()
         self.tableView.reloadData()
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                                                                //
-    // Function: slideNavigation                                                                                                      //
-    //                                                                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func slideNavigation (sender: UIButton) {
-        if (delegate != nil) {
-            delegate?.toggleLeftPanel!()
-        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +130,15 @@ class WorkoutArchiveVC: UITableViewController {
         return cell
     }
     
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: heightForRowAtIndexPath                                                                                              //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 66.0
+    }
+    
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                 //
     // Function: accessoryButtonTappedForRowWithIndexPath                                                                              //
@@ -165,7 +170,7 @@ class WorkoutArchiveVC: UITableViewController {
             newWorkout.routines.append(newRoutine)
         }
         self.workoutTable!.workout = newWorkout
-        self.navigationController?.pushViewController(self.workoutTable!, animated: false)
+        self.navigationController?.pushViewController(self.workoutTable!, animated: true)
     }
   
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,6 +214,17 @@ class WorkoutArchiveVC: UITableViewController {
         catch
         {
             print("The Fetch Failed")
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: slideNavigation                                                                                                      //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func slideNavigation (sender: UIButton) {
+        if (delegate != nil) {
+            delegate?.toggleLeftPanel!()
         }
     }
 }

@@ -9,7 +9,7 @@ class ContainerViewController: UIViewController {
     
     var centerNavigationController: UINavigationController!
     var centerViewController      : WorkoutSelectorVC!
-    var archiveViewController     : WorkoutArchiveVC = WorkoutArchiveVC()
+    var archiveViewController     : WorkoutArchiveVC = WorkoutArchiveVC(style:UITableViewStyle.Grouped)
     var requestViewController     : WorkoutRequestVC = WorkoutRequestVC()
     var workoutTableController    : WorkoutTableVC   = WorkoutTableVC(style:UITableViewStyle.Grouped)
     var leftViewController        : SidePanelViewController?

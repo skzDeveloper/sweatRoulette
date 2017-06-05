@@ -46,6 +46,9 @@ class SidePanelViewController: UIViewController {
         spinnerButton.setTitle("Spinner", forState: .Normal)
         spinnerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         spinnerButton.backgroundColor = UIColor.blackColor()
+        spinnerButton.layer.borderColor = UIColor(white: 1.0, alpha: 0.7).CGColor
+        spinnerButton.layer.borderWidth = 0.25
+        spinnerButton.layer.cornerRadius = 2.5
         spinnerButton.addTarget(self, action: "spinnerButtonPressed:", forControlEvents: .TouchDown)
         
         //Set Spinner Navigation Button Settings
@@ -53,6 +56,9 @@ class SidePanelViewController: UIViewController {
         archivesButton.setTitle("Archives", forState: .Normal)
         archivesButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         archivesButton.backgroundColor = UIColor.blackColor()
+        archivesButton.layer.borderColor = UIColor(white: 1.0, alpha: 0.7).CGColor
+        archivesButton.layer.borderWidth = 0.25
+        archivesButton.layer.cornerRadius = 2.5
         archivesButton.addTarget(self, action: "archiveButtonPressed:", forControlEvents: .TouchDown)
         
         // Add buttons to Subview
@@ -60,20 +66,40 @@ class SidePanelViewController: UIViewController {
         self.view.addSubview(archivesButton)
         
         // Add Constraints
-        let BUTTON_HEIGHT = 20
+        let BUTTON_HEIGHT    : Int = 40
+        let SPINNER_BUTTON_Y : Int = Int(UIScreen.mainScreen().bounds.height * 0.25) - BUTTON_HEIGHT
+        
         let d = ["sb":spinnerButton, "ab":archivesButton]
-        let m = ["bh": BUTTON_HEIGHT]
+        let m = ["bh": BUTTON_HEIGHT, "by" : SPINNER_BUTTON_Y]
         
-        //Set Spinner Navigation Button Constraints
+        // Set Archives Button Constraints
         spinnerButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[ab(==bh)]", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[ab]-100-|", options: NSLayoutFormatOptions.AlignAllBottom, metrics: nil, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[ab]|", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[ab(==bh)]",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: m,
+            views: d))
         
-        //Set Spinner Navigation Button Constraints
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[ab]-\(SPINNER_BUTTON_Y)-|",
+            options: NSLayoutFormatOptions.AlignAllBottom,
+            metrics: nil,
+            views: d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[ab]|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
+        
+        // Set Spinner Button Constraints
         archivesButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[sb(==bh)]", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[sb]-10-[ab]", options: NSLayoutFormatOptions.AlignAllLeft, metrics: nil, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[sb(==bh)]",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: m,
+            views: d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[sb][ab]", //"V:[sb]-1-[ab]"
+            options: NSLayoutFormatOptions.AlignAllLeft,
+            metrics: nil,
+            views: d))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[sb]|", options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
     }
     

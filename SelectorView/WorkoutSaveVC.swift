@@ -43,21 +43,21 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
         cancelButton = UIButton(type: .System)
         cancelButton.setTitle("Cancel", forState: .Normal)
         cancelButton.sizeToFit()
-        cancelButton.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) //UIColor.yellowColor()
+        cancelButton.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
         cancelButton.setTitleColor(UIColor(colorLiteralRed: 0.0, green: 0.68, blue: 0.94, alpha: 1.0), forState: .Normal)
         cancelButton.addTarget(self, action: "cancelButtonPressed:", forControlEvents: .TouchDown)
         
         // Create and configure Save Workout Label
         saveWorkoutLabel = UILabel()
         saveWorkoutLabel.text = "Save Workout"
-        saveWorkoutLabel.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) //UIColor.brownColor()
+        saveWorkoutLabel.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
         saveWorkoutLabel.textAlignment = .Center
         
         // Create and configure Save Button Settings
         saveButton = UIButton(type: .System)
         saveButton.setTitle("Save", forState: .Normal)
         saveButton.sizeToFit()
-        saveButton.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) //UIColor.purpleColor()
+        saveButton.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
         saveButton.setTitleColor(UIColor(colorLiteralRed: 0.0, green: 0.68, blue: 0.94, alpha: 1.0), forState: .Normal)
         saveButton.addTarget(self, action: "saveButtonPressed:", forControlEvents: .TouchDown)
         
@@ -85,11 +85,17 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        textField.becomeFirstResponder()
         
-       textField.becomeFirstResponder()
+        self.presentingViewController?.navigationItem.leftBarButtonItem?.enabled = false
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector : Selector("keyboardWillShow:"),
+            name     : UIKeyboardWillShowNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector : Selector("keyboardWillHide:"),
+            name     : UIKeyboardWillHideNotification, object: nil)
         
         let d = ["sv":saveView, "tf":textField, "cb":cancelButton, "wl":saveWorkoutLabel, "sb":saveButton]
         
@@ -99,18 +105,41 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
         saveWorkoutLabel.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints       = false
         
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[sv]|" ,options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[sv]|",
+            options : NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics : nil,
+            views   : d))
         
-        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[cb]-4-[tf]-4-|" ,options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
+        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[cb]-4-[tf]-4-|",
+            options : NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics : nil,
+            views   : d))
         
-        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[sb]-4-[tf]-4-|" ,options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
+        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[sb]-4-[tf]-4-|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
         
-        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[wl]-4-[tf]-4-|" ,options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
+        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[wl]-4-[tf]-4-|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
         
 
-        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-4-[tf]-4-|" ,options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: nil, views: d))
+        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-4-[tf]-4-|",
+            options: NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics: nil,
+            views: d))
 
-        bottomConstraint = NSLayoutConstraint(item:saveView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1, constant: 0)
+        bottomConstraint = NSLayoutConstraint(
+            item       : saveView,
+            attribute  : .Bottom,
+            relatedBy  : .Equal,
+            toItem     : view,
+            attribute  : .Bottom,
+            multiplier : 1,
+            constant   : 0)
+        
         view.addConstraint(bottomConstraint)
     }
     
@@ -135,7 +164,6 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
         
         if let userInfo = notification.userInfo {
             if let keyboardSize = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-                //print("Keyboard Height = \(keyboardSize.height)")
                 bottomConstraint.constant = -keyboardSize.height
             }
         }
@@ -148,7 +176,6 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func keyboardWillHide(notification: NSNotification) {
         bottomConstraint.constant = 0
-        //print("keyboard will hide")
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +184,7 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        //print("Return Pressed,should dismiss the Modal VC")
+        
         if let presentingVC = self.presentingViewController {
             textField.resignFirstResponder()
             presentingVC.dismissViewControllerAnimated(true, completion: nil)
@@ -181,12 +208,6 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
         let SAVE_LABEL_WIDTH : CGFloat = WIDTH_VIEWS * 0.60
         let SAVE_BUTTON_WIDTH: CGFloat = WIDTH_VIEWS * 0.20
         
-        
-//        print("Main View Height : \(VIEW_HEIGHT)")
-//        print("Save View Height : \(SAVE_HEIGHT)")
-//        print("Save View Width  : \(SAVE_WIDTH)")
-//        print("Text Field Height: \(TEXT_FIELD_HEIGHT)")
-        
         let d = ["sv":saveView, "tf":textField, "sl":saveWorkoutLabel, "sb":saveButton, "cb":cancelButton]
         let m = ["sh": SAVE_HEIGHT, "tfh": TEXT_FIELD_HEIGHT, "i": WIDTH_INSET,  "slw": SAVE_LABEL_WIDTH, "sbw": SAVE_BUTTON_WIDTH]
 
@@ -197,15 +218,35 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
         saveButton.translatesAutoresizingMaskIntoConstraints       = false
         cancelButton.translatesAutoresizingMaskIntoConstraints     = false
         
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[sv(==sh)]"  , options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[tf(==tfh)]" , options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[sv(==sh)]",
+            options : NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics : m,
+            views   : d))
         
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[cb(==sbw)]" , options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[sl(==slw)]" , options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[sb(==sbw)]" , options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[tf(==tfh)]",
+            options : NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics : m,
+            views   : d))
         
-        //"H:|-i-[cb][sl][sb]-i-|"
-        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-i-[cb][sl][sb]-i-|" ,options: NSLayoutFormatOptions.DirectionLeftToRight, metrics: m, views: d))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[cb(==sbw)]",
+            options : NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics : m,
+            views   : d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[sl(==slw)]",
+            options : NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics : m,
+            views   : d))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[sb(==sbw)]",
+            options : NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics : m,
+            views   : d))
+
+        saveView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-i-[cb][sl][sb]-i-|",
+            options : NSLayoutFormatOptions.DirectionLeftToRight,
+            metrics : m,
+            views   : d))
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,8 +259,8 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
         let managedContext : NSManagedObjectContext = appDelegate.managedObjectContext
         //Need to add date
         
-        let workoutCD:WorkoutCD = NSEntityDescription.insertNewObjectForEntityForName("WorkoutCD",
-        inManagedObjectContext: managedContext) as! WorkoutCD
+        let workoutCD:WorkoutCD = NSEntityDescription.insertNewObjectForEntityForName(
+            "WorkoutCD", inManagedObjectContext: managedContext) as! WorkoutCD
         
         workoutCD.title = self.textField!.text
         workoutCD.routines = NSSet()
@@ -227,8 +268,8 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
         
         for routine : Routine in currentWorkout.routines {
             //Create Core Data Routine
-            let routineCD:RoutineCD = NSEntityDescription.insertNewObjectForEntityForName("RoutineCD",
-                inManagedObjectContext: managedContext) as! RoutineCD
+            let routineCD:RoutineCD = NSEntityDescription.insertNewObjectForEntityForName(
+                "RoutineCD", inManagedObjectContext: managedContext) as! RoutineCD
             
             routineCD.name      = routine.sectionTitle
             routineCD.exercises = NSSet()
@@ -236,8 +277,8 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
             
             for exercise in routine.exercises {
                 //Create Core Data Exercise
-                let exerciseCD:ExerciseCD = NSEntityDescription.insertNewObjectForEntityForName("ExerciseCD",
-                inManagedObjectContext: managedContext) as! ExerciseCD
+                let exerciseCD:ExerciseCD = NSEntityDescription.insertNewObjectForEntityForName(
+                    "ExerciseCD", inManagedObjectContext: managedContext) as! ExerciseCD
                 
                 exerciseCD.name      = exercise.name
                 exerciseCD.hyperlink = exercise.hyperlink
@@ -259,7 +300,7 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func cancelButtonPressed(sender: UIButton) {
-        //print("Cancel Button Pressed")
+        self.presentingViewController?.navigationItem.leftBarButtonItem?.enabled = true
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -270,6 +311,7 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func saveButtonPressed(sender: UIButton) {
         self.saveCurrentWorkout()
+        self.presentingViewController?.navigationItem.leftBarButtonItem?.enabled = true
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

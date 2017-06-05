@@ -47,12 +47,10 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     // Function: viewWillAppear                                                                                                       //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func viewWillAppear(animated: Bool)
-    {
+    override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        //print("View Will Appear")
-        //Set the Logo on the navigation bar
+
+        // Set the Logo 
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
         imageView.contentMode = .ScaleAspectFit
         let image = UIImage(named: "SweatRouletteLogo")
@@ -69,6 +67,7 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
         let leftItem:UIBarButtonItem = UIBarButtonItem()
         leftItem.customView = hamburgerButton
         self.navigationItem.leftBarButtonItem = leftItem
+        self.navigationItem.leftBarButtonItem!.enabled = false
         
         self.view.backgroundColor = UIColor(colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
 
@@ -81,10 +80,23 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
         view.addSubview(indicator)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         
+        view.addConstraint(NSLayoutConstraint(
+            item       : indicator,
+            attribute  : .CenterX,
+            relatedBy  : .Equal,
+            toItem     : self.view,
+            attribute  : .CenterX,
+            multiplier : 1,
+            constant   : 0))
         
-        view.addConstraint(NSLayoutConstraint(item: indicator, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0))
-        
-        view.addConstraint(NSLayoutConstraint(item: indicator, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(
+            item       : indicator,
+            attribute  : .CenterY,
+            relatedBy  : .Equal,
+            toItem     : self.view,
+            attribute  : .CenterY,
+            multiplier : 1,
+            constant   : 0))
         
         self.section = self.workoutSelector!.getSectionString()
         self.cache.setRequestString(self.section!, request: self.workoutSelector!.getRequestString())
@@ -205,6 +217,7 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private func addExercises(sectionTitle: String) {
+        
         if self.cache.isLoadNeeded(sectionTitle) {
             print("We need to load routine data")
             loadData("addExercises", info: nil)
@@ -248,6 +261,7 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func switchExercise(sectionTitle: String, indexPath: NSIndexPath) {
+        
         // Request data from server
         if self.cache.isLoadNeeded(sectionTitle) {
             // Set paramters for updating the model
@@ -305,6 +319,7 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func addExercise(sectionTitle: String, indexPath: NSIndexPath) {
+        
         if self.cache.isLoadNeeded(sectionTitle) {
             let paramData : [String : AnyObject] = [ "section" : sectionTitle, "path" : indexPath]
             loadData("addExericse", info: paramData)
@@ -342,12 +357,14 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
         if var routineData: [ExerciseData] = self.cache.getRoutineData(sectionTitle) {
             if routineData.isEmpty == false {
                 // Remove data from the cache
-                let exData   : ExerciseData = routineData.removeFirst()
-                let exercise : Exercise = Exercise(
-                    exName: exData.name,
-                    exHyperlink: exData.hyperlink,
-                    exSets: exData.sets,
-                    exReps: exData.reps)
+                let exData : ExerciseData = routineData.removeFirst()
+                
+                let exercise    : Exercise = Exercise(
+                    exName      : exData.name,
+                    exHyperlink : exData.hyperlink,
+                    exSets      : exData.sets,
+                    exReps      : exData.reps)
+                
                 self.workoutTable!.workout.routines[indexPath.section].exercises.insert(exercise, atIndex: indexPath.row)
                 self.workoutTable!.tableView!.reloadData()
             }

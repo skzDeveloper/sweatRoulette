@@ -15,7 +15,6 @@ class OptionCollectionVC: UICollectionViewController {
     var workoutOptionData:[WorkoutOptionData] = []
     var selectedItem     : NSIndexPath!
     
-    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
     // Function: init                                                                                                                 //
