@@ -15,6 +15,7 @@ import CoreData
 extension RoutineCD {
 
     @NSManaged var name: String?
+    @NSManaged var request: String?
     @NSManaged var exercises: NSSet?
     @NSManaged var workout: WorkoutCD?
 

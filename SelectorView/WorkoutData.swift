@@ -53,7 +53,7 @@ struct ExerciseData
 // Class: ExerciseCacheItem                                                                                                       //
 //                                                                                                                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class ExerciseCacheItem {
+class ExerciseCacheItem : NSObject {
     var section       : String
     var requestString : String!
     var exerciseList: [ExerciseData]
@@ -63,15 +63,17 @@ class ExerciseCacheItem {
         self.section       = section
         self.requestString = nil
         self.exerciseList  = [ExerciseData] ()
+        
+        super.init()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                                                                                                //
-// Class: WorkoutSectionCacheItem                                                                                                 //
-//                                                                                                                                //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class ExerciseCache {
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                                    //
+// Class: WorkoutSectionCacheItem                                                                                                     //
+//                                                                                                                                    //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class ExerciseCache : NSObject {
     var cacheItems : [ExerciseCacheItem]
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +81,7 @@ class ExerciseCache {
     // Function: ExerciseCache - init                                                                                                 //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    init()
+    override init()
     {
         self.cacheItems = [ExerciseCacheItem] ()
         self.cacheItems.append(ExerciseCacheItem(section:"Abs"))
@@ -95,7 +97,10 @@ class ExerciseCache {
         self.cacheItems.append(ExerciseCacheItem(section:"Shoulders"))
         self.cacheItems.append(ExerciseCacheItem(section:"Traps"))
         self.cacheItems.append(ExerciseCacheItem(section:"Triceps"))
+        
+        super.init()
     }
+    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
     // Function: ExerciseCache - getCacheSection                                                                                      //
@@ -106,6 +111,20 @@ class ExerciseCache {
         for cacheItem in cacheItems {
             if cacheItem.section == section {
                 return cacheItem
+            }
+        }
+        return nil
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: ExerciseCache - getRequestString                                                                                     //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func getRequestString(section: String) -> String? {
+        
+        for cacheItem in cacheItems {
+            if cacheItem.section == section {
+                return cacheItem.requestString
             }
         }
         return nil
@@ -125,7 +144,7 @@ class ExerciseCache {
     // Function: ExerciseCache - isLoadNeeded                                                                                         //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func isLoadNeeded(section: String) -> Bool{
+    func isLoadNeededFor(section: String) -> Bool{
         var loadNeeded = false
         
         if let cacheSection: ExerciseCacheItem = self.getCacheSection(section) {
@@ -146,6 +165,22 @@ class ExerciseCache {
         if let cacheSection: ExerciseCacheItem = self.getCacheSection(section) {
             cacheSection.exerciseList.append(exercise)
         }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: ExerciseCache - getExercise                                                                                          //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func getExercise(section: String) -> ExerciseData? {
+        var exData: ExerciseData? = nil
+        
+        if let cacheSection: ExerciseCacheItem = self.getCacheSection(section) {
+            if !cacheSection.exerciseList.isEmpty {
+                exData = cacheSection.exerciseList.removeFirst()
+            }
+        }
+        return exData
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,6 +227,8 @@ class Exercise : NSObject
         self.hyperlink = exHyperlink
         self.sets      = exSets
         self.reps      = exReps
+        
+        super.init()
     }
 }
 
@@ -201,13 +238,17 @@ class Exercise : NSObject
 //                                                                                                                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Routine : NSObject{
-    var sectionTitle : String
-    var exercises    :[Exercise]
+    var sectionTitle  : String
+    var requestString : String
+    var exercises     :[Exercise]
 
-    init(sectionTitle: String)
+    init(sectionTitle: String, requestString: String)
     {
-        self.sectionTitle = sectionTitle
-        self.exercises    = [Exercise] ()
+        self.sectionTitle  = sectionTitle
+        self.requestString = requestString
+        self.exercises     = [Exercise] ()
+        
+        super.init()
     }
 }
 
@@ -223,6 +264,7 @@ class Workout : NSObject {
     
     override init() {
         routines = [Routine] ()
+        super.init()
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,17 +286,19 @@ class Workout : NSObject {
     // Function: Workout - addRoutine                                                                                        //
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func addRoutine(sectionTitle: String) {
-        self.routines.append(Routine(sectionTitle: sectionTitle))
-    }
+    //func addRoutine(sectionTitle: String) {
+    //    self.routines.append(Routine(sectionTitle: sectionTitle))
+    //}
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
     // Function: Workout - addExercises                                                                                      //
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func addExercises(sectionTitle: String, routineExercises: [ExerciseData]) {
+    func addExercises(sectionTitle: String, request: String, routineExercises: [ExerciseData]) {
         if let routine : Routine = self.getRoutine(sectionTitle) {
+            // Update the request string
+            routine.requestString = request
             
             for exData : ExerciseData in routineExercises {
                 routine.exercises.append(Exercise(
@@ -266,7 +310,7 @@ class Workout : NSObject {
             }
         }
         else {
-            let routine = Routine(sectionTitle: sectionTitle)
+            let routine = Routine(sectionTitle: sectionTitle, requestString: request)
             
             for exData : ExerciseData in routineExercises {
                 routine.exercises.append(Exercise(

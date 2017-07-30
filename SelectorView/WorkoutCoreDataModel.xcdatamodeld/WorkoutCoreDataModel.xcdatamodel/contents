@@ -9,6 +9,7 @@
     </entity>
     <entity name="RoutineCD" representedClassName=".RoutineCD" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="request" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="exercises" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ExerciseCD" inverseName="routine" inverseEntity="ExerciseCD" syncable="YES"/>
         <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkoutCD" inverseName="routines" inverseEntity="WorkoutCD" syncable="YES"/>
     </entity>
@@ -18,8 +19,8 @@
         <relationship name="routines" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RoutineCD" inverseName="workout" inverseEntity="RoutineCD" syncable="YES"/>
     </entity>
     <elements>
-        <element name="WorkoutCD" positionX="-407" positionY="-117" width="128" height="88"/>
-        <element name="RoutineCD" positionX="-189" positionY="27" width="128" height="88"/>
         <element name="ExerciseCD" positionX="43" positionY="132" width="128" height="118"/>
+        <element name="RoutineCD" positionX="-189" positionY="27" width="128" height="103"/>
+        <element name="WorkoutCD" positionX="-407" positionY="-117" width="128" height="88"/>
     </elements>
 </model>

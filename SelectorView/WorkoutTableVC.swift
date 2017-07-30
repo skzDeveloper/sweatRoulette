@@ -520,6 +520,6 @@ class WorkoutTableVC: UITableViewController, UIGestureRecognizerDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func slideNavigation (sender: UIButton) {
-        delegate?.toggleLeftPanel?()
+        delegate?.toggleLeftPanel?(self)
     }
 }

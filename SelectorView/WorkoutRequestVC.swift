@@ -13,19 +13,21 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     var indicator       : UIActivityIndicatorView! = nil
     var workoutTable    : WorkoutTableVC?
     var workoutSelector : WorkoutSelectorVC?
+    var delegate        : WorkoutSelectorVCDelegate?
     var cache           : ExerciseCache = ExerciseCache()
     var section         : String?
-    var delegate        : WorkoutSelectorVCDelegate?
+    var request         : String?
 
     // MARK: - UIViewController Overrides
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
-    // Function: viewDidLoad                                                                                                          //
+    // Function: init                                                                                                                 //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    init() {
+        //Call UIViewControllers designated class
+        super.init(nibName: nil, bundle: nil)
+        
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector : "addExercisesHandler:",
             name     : "addExercises",
@@ -40,7 +42,25 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
             selector : "addExerciseHandler:",
             name     : "addExericse",
             object   : self)
+        
     }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: init                                                                                                                 //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                                //
+    // Function: viewDidLoad                                                                                                          //
+    //                                                                                                                                //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//    }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
@@ -98,10 +118,11 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
             multiplier : 1,
             constant   : 0))
         
-        self.section = self.workoutSelector!.getSectionString()
-        self.cache.setRequestString(self.section!, request: self.workoutSelector!.getRequestString())
-        
-        addExercises(self.section!)
+        if self.request != nil && self.section != nil {
+            //TODO: Need to get rid of setting cache string
+            self.cache.setRequestString(self.section!, request: self.request!)
+            addExercises(self.section!, request: self.request!)
+        }
     }
     
     // MARK: - Data loading Methods
@@ -110,11 +131,10 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     // Function: loadData                                                                                                             //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //func loadData(cacheItem: WorkoutSectionCacheItem, muscle: String, info: [String:String], handlerString: String) {
-    func loadData(handlerString: String, info: [NSObject : AnyObject]?) {
+    func loadData(handlerString: String, info: [NSObject : AnyObject]?, request: String) {
         // Set the HTTP parameters
-        let requestString: String = workoutSelector!.getRequestString()
-        let url = NSURL(string: requestString)
+        //let requestString: String = workoutSelector!.getRequestString()
+        let url = NSURL(string: request)
         let urlRequest = NSMutableURLRequest(URL: url!)
         urlRequest.HTTPMethod = "GET"
         urlRequest.setValue("application/xml ", forHTTPHeaderField: "Accept")
@@ -216,16 +236,21 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     // Function: addExercises                                                                                                         //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private func addExercises(sectionTitle: String) {
-        
-        if self.cache.isLoadNeeded(sectionTitle) {
-            print("We need to load routine data")
-            loadData("addExercises", info: nil)
+    private func addExercises(section: String, request: String) {
+        // Exercises need to be loaded from the server
+        if self.cache.isLoadNeededFor(section) {
+            // Set Class section for parser
+            self.section = section
+            
+            // Load Exercies from the Server
+            let paramData : [String : AnyObject] = [ "section" : section, "request" : request]
+            loadData("addExercises", info: paramData, request: request)
+            
         }
+        // Exercises are available locally
         else
         {
-            print("We have routine data")
-            self.addExercisesToModel(sectionTitle)
+            self.addExercisesToModel(section, request)
         }
     }
     
@@ -235,7 +260,14 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func addExercisesHandler(notification: NSNotification) {
-        self.addExercisesToModel(self.section!)
+        // Extract Prameters
+        if let params: [NSObject : AnyObject] = notification.userInfo {
+            if let section : String = params["section"] as? String {
+                if let request : String = params["request"] as? String {
+                    self.addExercisesToModel(section, request)
+                }
+            }
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,13 +275,11 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     // Function: addExercisesToModel                                                                                                  //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private func addExercisesToModel(sectionTitle: String) {
-        //Get the exercise data from the routine cache
-        print("Add exercises to model")
-        if let exercises : [ExerciseData] = self.cache.getRoutineData(sectionTitle) {
+    private func addExercisesToModel(section: String, _ requestString: String) {
+        // Exercises are available from the cache
+        if let exercises : [ExerciseData] = self.cache.getRoutineData(section) {
             // Add the exercises to the model
-            print("We got exercise data from the cache")
-            self.workoutTable!.workout.addExercises(sectionTitle, routineExercises: exercises)
+            self.workoutTable!.workout.addExercises(section, request: requestString, routineExercises: exercises)
         }
         self.navigationController?.pushViewController(self.workoutTable!, animated: false)
     }
@@ -260,17 +290,22 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     // Function: switchExercise                                                                                                       //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func switchExercise(sectionTitle: String, indexPath: NSIndexPath) {
-        
-        // Request data from server
-        if self.cache.isLoadNeeded(sectionTitle) {
-            // Set paramters for updating the model
-            let paramData : [String : AnyObject] = [ "section" : sectionTitle, "path" : indexPath]
-            loadData("switchExericse", info: paramData)
+    func switchExercise(section: String, indexPath: NSIndexPath) {
+        // Exercise need to be loaded from the server
+        if self.cache.isLoadNeededFor(section) {
+            self.section = section
+            
+            //if let requestString:  String = self.cache.getRequestString(section) {
+            if let requestString:  String = self.workoutTable?.workout.getRoutine(section)?.requestString {
+                // Load Exercise from Server
+                let paramData : [String : AnyObject] = [ "section" : section, "path" : indexPath]
+                loadData("switchExericse", info: paramData, request: requestString)
+            }
+            
         }
-        // Data is avaiable locally
+        // Exercise is available locally
         else {
-            self.switchExerciseInModel(sectionTitle, indexPath: indexPath)
+            self.switchExerciseInModel(section, indexPath: indexPath)
         }
     }
     
@@ -280,7 +315,7 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func switchExerciseHandler(notification: NSNotification) {
-        
+        print("In switch Handler")
         if let params: [NSObject : AnyObject] = notification.userInfo {
             if let section : String = params["section"] as? String {
                 if let path : NSIndexPath = params["path"] as? NSIndexPath {
@@ -296,18 +331,15 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private func switchExerciseInModel(sectionTitle: String, indexPath: NSIndexPath) {
-        // Get caches routine data
-        if var routineData: [ExerciseData] = self.cache.getRoutineData(sectionTitle) {
-            if routineData.isEmpty == false {
-                // Remove data from the cache
-                let exData  : ExerciseData = routineData.removeFirst()
-                if let exercise: Exercise = self.workoutTable!.workout.routines[indexPath.section].exercises[indexPath.row] {
+        // Get Exercise Data from cache
+        if let exData  : ExerciseData = self.cache.getExercise(sectionTitle) {
+            // Replace Model Data with Exercise Data from the cache
+            if let exercise: Exercise = self.workoutTable!.workout.routines[indexPath.section].exercises[indexPath.row] {
                     exercise.name      = exData.name
                     exercise.hyperlink = exData.hyperlink
                     exercise.sets      = exData.sets
                     exercise.reps      = exData.reps
                     self.workoutTable!.tableView!.reloadData()
-                }
             }
         }
     }
@@ -318,16 +350,21 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     // Function: addExercise                                                                                                          //
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func addExercise(sectionTitle: String, indexPath: NSIndexPath) {
-        
-        if self.cache.isLoadNeeded(sectionTitle) {
-            let paramData : [String : AnyObject] = [ "section" : sectionTitle, "path" : indexPath]
-            loadData("addExericse", info: paramData)
+    func addExercise(section: String, indexPath: NSIndexPath) {
+        // Exercise need to be loaded from the server
+        if self.cache.isLoadNeededFor(section) {
+            self.section = section
+            
+            //if let requestString:  String = self.cache.getRequestString(section) {
+            if let requestString:  String = self.workoutTable?.workout.getRoutine(section)?.requestString {
+                // Load Exercise from the Server
+                let paramData : [String : AnyObject] = [ "section" : section, "path" : indexPath]
+                loadData("addExericse", info: paramData, request: requestString)
+            }
         }
-        else
-        {
-            print("We have add exercise data")
-            self.addExerciseToModel(sectionTitle, indexPath: indexPath)
+        // Exercise is available locally
+        else {
+            self.addExerciseToModel(section, indexPath: indexPath)
         }
     }
     
@@ -353,21 +390,17 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private func addExerciseToModel(sectionTitle: String, indexPath: NSIndexPath) {
-        // Get caches routine data
-        if var routineData: [ExerciseData] = self.cache.getRoutineData(sectionTitle) {
-            if routineData.isEmpty == false {
-                // Remove data from the cache
-                let exData : ExerciseData = routineData.removeFirst()
+        // Get Exercise Data from cache
+        if let exData : ExerciseData = self.cache.getExercise(sectionTitle) {
                 
-                let exercise    : Exercise = Exercise(
-                    exName      : exData.name,
-                    exHyperlink : exData.hyperlink,
-                    exSets      : exData.sets,
-                    exReps      : exData.reps)
+            let exercise    : Exercise = Exercise(
+                exName      : exData.name,
+                exHyperlink : exData.hyperlink,
+                exSets      : exData.sets,
+                exReps      : exData.reps)
                 
-                self.workoutTable!.workout.routines[indexPath.section].exercises.insert(exercise, atIndex: indexPath.row)
-                self.workoutTable!.tableView!.reloadData()
-            }
+            self.workoutTable!.workout.routines[indexPath.section].exercises.insert(exercise, atIndex: indexPath.row)
+            self.workoutTable!.tableView!.reloadData()
         }
     }
     
@@ -378,6 +411,6 @@ class WorkoutRequestVC: UIViewController , NSXMLParserDelegate {
     //                                                                                                                                //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func slideNavigation (sender: UIButton) {
-        delegate?.toggleLeftPanel?()
+        delegate?.toggleLeftPanel?(self)
     }
 }

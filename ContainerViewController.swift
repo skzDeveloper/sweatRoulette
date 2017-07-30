@@ -9,6 +9,7 @@ class ContainerViewController: UIViewController {
     
     var centerNavigationController: UINavigationController!
     var centerViewController      : WorkoutSelectorVC!
+    var rightViewController       : UIViewController!
     var archiveViewController     : WorkoutArchiveVC = WorkoutArchiveVC(style:UITableViewStyle.Grouped)
     var requestViewController     : WorkoutRequestVC = WorkoutRequestVC()
     var workoutTableController    : WorkoutTableVC   = WorkoutTableVC(style:UITableViewStyle.Grouped)
@@ -71,7 +72,7 @@ class ContainerViewController: UIViewController {
             print("The Top VC is not the same take action")
             centerNavigationController.popToRootViewControllerAnimated(false)
             centerNavigationController.pushViewController(archiveViewController, animated: false)
-            toggleLeftPanel()
+            toggleLeftPanel(nil)
         }
         //
         else {
@@ -88,7 +89,7 @@ class ContainerViewController: UIViewController {
         if centerNavigationController.topViewController !== centerViewController {
             print("The top VC is not the same take action")
             centerNavigationController.popToRootViewControllerAnimated(false)
-            toggleLeftPanel()
+            toggleLeftPanel(nil)
         }
         else {
              print("The top is button pressed so do nothing")
@@ -104,11 +105,24 @@ extension ContainerViewController: WorkoutSelectorVCDelegate {
     // Function: toggleLeftPanel                                                                                             //
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func toggleLeftPanel() {
+    func toggleLeftPanel(rightVC: UIViewController!) {
         let notAlreadyExpanded = (currentState != .LeftPanelExpanded)
         
         if notAlreadyExpanded {
+            print("Not Already Expanded")
             addLeftPanelViewController()
+            
+            if rightVC != nil {
+                print("Already Expanded")
+                self.rightViewController = rightVC
+                self.rightViewController.view.userInteractionEnabled = false
+            }
+        }
+        else {
+            print("Already Expanded")
+            self.rightViewController.view.userInteractionEnabled = true
+            self.rightViewController = nil
+            
         }
         
         animateLeftPanel(shouldExpand: notAlreadyExpanded)
@@ -155,6 +169,10 @@ extension ContainerViewController: WorkoutSelectorVCDelegate {
                 
                 self.leftViewController!.view.removeFromSuperview()
                 self.leftViewController = nil;
+                
+                if self.rightViewController != nil {
+                    self.rightViewController.view.userInteractionEnabled = true
+                }
             }
         }
     }

@@ -155,7 +155,8 @@ class WorkoutArchiveVC: UITableViewController {
         let archivedRoutines : [RoutineCD] = archivedWorkout.routines!.allObjects as! [RoutineCD]
         
         for archivedRoutine in archivedRoutines {
-            let newRoutine       : Routine      = Routine(sectionTitle: archivedRoutine.name!)
+            //TODO: Need to add the request string
+            let newRoutine       : Routine      = Routine(sectionTitle: archivedRoutine.name!, requestString: archivedRoutine.request!)
             let archivedExercises: [ExerciseCD] = archivedRoutine.exercises!.allObjects as! [ExerciseCD]
             
             for archivedExercise in archivedExercises {
@@ -224,7 +225,7 @@ class WorkoutArchiveVC: UITableViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func slideNavigation (sender: UIButton) {
         if (delegate != nil) {
-            delegate?.toggleLeftPanel!()
+            delegate?.toggleLeftPanel!(self)
         }
     }
 }

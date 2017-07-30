@@ -10,7 +10,7 @@ import UIKit
 
 @objc
 protocol WorkoutSelectorVCDelegate {
-    optional func toggleLeftPanel()
+    optional func toggleLeftPanel(rightVC : UIViewController!)
 }
 
 class WorkoutSelectorVC: UIViewController {
@@ -209,7 +209,7 @@ class WorkoutSelectorVC: UIViewController {
         let BUTTON_HEIGHT: CGFloat = VIEW_HEIGHT * 0.12
         let OPTION_HEIGHT: CGFloat = (VIEW_HEIGHT - BUTTON_HEIGHT) / 3
 
-        let d = ["b":button,
+        let d = ["b" :button,
                  "mo":muscleOptionControler.view,
                  "so":styleOptionControler.view,
                  "lo":levelOptionController.view,"foo":view]
@@ -227,22 +227,22 @@ class WorkoutSelectorVC: UIViewController {
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[b(==bh)]" ,
             options: NSLayoutFormatOptions.DirectionLeftToRight,
             metrics: m,
-            views: d))
+            views  : d))
         
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[mo(==oh)]",
             options: NSLayoutFormatOptions.DirectionLeftToRight,
             metrics: m,
-            views: d))
+            views  : d))
         
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[so(==oh)]",
             options: NSLayoutFormatOptions.DirectionLeftToRight,
             metrics: m,
-            views: d))
+            views  : d))
         
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[lo(==oh)]",
             options: NSLayoutFormatOptions.DirectionLeftToRight,
             metrics: m,
-            views: d))
+            views  : d))
     }
     
     // MARK: - WorkoutSelectorVC Logic
@@ -252,16 +252,15 @@ class WorkoutSelectorVC: UIViewController {
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func buttonPressed(sender: UIButton) {
-    
-        // Not all Options are selected
-        if sender.titleForState(.Normal) == "SPIN"
-        {
-            self.spinOptions()
-        }
-        // Get Workout
-        else
-        {
+        // All options selected request workout
+        if self.allOptionsSelected() {
+            request!.section = self.getSectionString()
+            request!.request = self.getRequestString()
             self.navigationController?.pushViewController(request!, animated: true)
+        }
+        // Not all options seleted, spin unseleted options
+        else{
+            self.spinOptions()
         }
     }
     
@@ -275,7 +274,7 @@ class WorkoutSelectorVC: UIViewController {
         print("Muscle Observer Notified")
         self.muscleGroupSelection = self.muscleOptionControler.collectionOption.getSelectedIndexPath()
         
-        refreshButton()
+        self.refreshButton()
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,20 +287,19 @@ class WorkoutSelectorVC: UIViewController {
         print("Style Observer Notified")
         self.styleSelection = self.styleOptionControler.collectionOption.getSelectedIndexPath()
 
-        refreshButton()
+        self.refreshButton()
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
-    // Function: WorkoutSelectorVC: refreshStyleOption(notification                                                          //
+    // Function: WorkoutSelectorVC: refreshDifficultyOption                                                                  //
     //                                                                                                                       //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func refreshDifficultyOption(notification: NSNotification) {
-        
-        print("Difficlty Observer Notified")
+        // Difficlty Observer Notified
         self.difficultySelection = self.levelOptionController.collectionOption.getSelectedIndexPath()
         
-        refreshButton()
+        self.refreshButton()
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -311,11 +309,7 @@ class WorkoutSelectorVC: UIViewController {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func refreshButton() -> Void {
         // All options are selected
-        if muscleGroupSelection != nil && styleSelection != nil  && difficultySelection != nil {
-            let sectionTitle  : String = self.getSectionString()
-            let requestString : String = self.getRequestString()
-            
-            self.request!.cache.setRequestString(sectionTitle, request: requestString)
+        if self.allOptionsSelected() {
             button.setTitle("GET WORKOUT", forState: .Normal)
         }
         else {
@@ -325,9 +319,9 @@ class WorkoutSelectorVC: UIViewController {
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
-    // Function: WorkoutSelectorVC: refreshButton                                                                            //
+    // Function: WorkoutSelectorVC: spinOptions                                                                              //
     //                                                                                                                       //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func spinOptions() -> Void {
         if self.muscleGroupSelection == nil {
             self.muscleOptionControler!.collectionOption!.startScrollAnimation()
@@ -341,7 +335,18 @@ class WorkoutSelectorVC: UIViewController {
             self.levelOptionController!.collectionOption!.startScrollAnimation()
         }
     }
-
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                                       //
+    // Function: WorkoutSelectorVC: allOptionsSecleted                                                                       //
+    //                                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func allOptionsSelected() -> Bool {
+        return self.muscleGroupSelection != nil &&
+               self.styleSelection       != nil &&
+               self.difficultySelection  != nil
+    }
+    
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                       //
     // Function: WorkoutSelectorVC: getRequestString                                                                         //
@@ -349,13 +354,10 @@ class WorkoutSelectorVC: UIViewController {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func getRequestString() -> String
     {
-        let request: String =
-            "http://ec2-34-208-245-186.us-west-2.compute.amazonaws.com:8080/SweatRoulette/resources/WorkoutResult?" +
-                "bodyPart=\(muscleGroupOptions[muscleGroupSelection!.item].paramName)&"  +
-                "style=\(workoutStyleOptions[styleSelection!.item].paramName)&"    +
-                "intensity=\(difficultyOptions[difficultySelection!.item].paramName)"
-        
-        return request
+        return "http://ec2-34-208-245-186.us-west-2.compute.amazonaws.com:8080/SweatRoulette/resources/WorkoutResult?" +
+                       "bodyPart=\(muscleGroupOptions[muscleGroupSelection!.item].paramName)&"                         +
+                       "style=\(workoutStyleOptions[styleSelection!.item].paramName)&"                                 +
+                       "intensity=\(difficultyOptions[difficultySelection!.item].paramName)"
         
     }
     
@@ -379,7 +381,7 @@ class WorkoutSelectorVC: UIViewController {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func slideNavigation (sender: UIButton) {
         if (delegate != nil) {
-            delegate?.toggleLeftPanel!()
+            delegate?.toggleLeftPanel!(self)
         }
     }
 }

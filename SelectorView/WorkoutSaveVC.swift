@@ -272,6 +272,7 @@ class WorkoutSaveVC: UIViewController, UITextFieldDelegate {
                 "RoutineCD", inManagedObjectContext: managedContext) as! RoutineCD
             
             routineCD.name      = routine.sectionTitle
+            routineCD.request   = routine.requestString
             routineCD.exercises = NSSet()
             var exTemp : [ExerciseCD] = [ExerciseCD]()
             
