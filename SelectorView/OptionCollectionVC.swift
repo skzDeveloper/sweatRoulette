@@ -15,6 +15,11 @@ class OptionCollectionVC: UICollectionViewController {
     var workoutOptionData:[WorkoutOptionData] = []
     var selectedItem     : NSIndexPath!
     
+    //start animation
+    var ticks : Int = 0
+    var testTimer : NSTimer!
+    var testTimer2 : NSTimer!
+    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                                                //
     // Function: init                                                                                                                 //
@@ -118,7 +123,7 @@ class OptionCollectionVC: UICollectionViewController {
         let fakeIndex  : CGFloat = CGFloat(self.workoutOptionData.count - 4)
         let fakeOffset : CGFloat = cellOffset * fakeIndex
         
-        print("offset x: \(offsetX)")
+        //print("offset x: \(offsetX)")
         //print("Cell Offset:\(cellOffset)")
         
         // Handle Scrolling Left Rollover
@@ -139,7 +144,7 @@ class OptionCollectionVC: UICollectionViewController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        print("scroll View Did End Decelerating")
+        //print("scroll View Did End Decelerating")
         
         let collectionView = scrollView as! UICollectionView
         
@@ -163,7 +168,7 @@ class OptionCollectionVC: UICollectionViewController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        print("scroll View Will Begin Dragging")
+        //print("scroll View Will Begin Dragging")
         
         let collectionView = scrollView as! UICollectionView
         
@@ -178,7 +183,7 @@ class OptionCollectionVC: UICollectionViewController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        print("Scroll View Did End Scrolling Animation")
+        //print("Scroll View Did End Scrolling Animation")
         let collectionView = scrollView as! UICollectionView
         
         if let selectedIndex: NSIndexPath = self.getSelectedIndexPath() {
@@ -193,7 +198,7 @@ class OptionCollectionVC: UICollectionViewController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        print("Collection View Did Select Item at Index Path \(indexPath.item)")
+        //print("Collection View Did Select Item at Index Path \(indexPath.item)")
         var index             : NSIndexPath = indexPath
         let item              : Int         = indexPath.item
         let leftRolloverIndex : Int         = self.workoutOptionData.count - 4
@@ -230,7 +235,7 @@ class OptionCollectionVC: UICollectionViewController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        print("Collection View Did De-Select Item At Index Path \(indexPath.item)")
+        //print("Collection View Did De-Select Item At Index Path \(indexPath.item)")
         
         self.deselectItem(collectionView, indexPath: indexPath)
     }
@@ -323,9 +328,120 @@ class OptionCollectionVC: UICollectionViewController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     func startScrollAnimation() {
-        print("Start Scroll Animation")
 
-        NSTimer.scheduledTimerWithTimeInterval(0.0, target: self, selector: "scrollAnimation:", userInfo: 0, repeats: false)
+        //NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "scrollAnimation:", userInfo: 5, repeats: false)
+        let randomNumber : Int =  Int (arc4random_uniform(UInt32(40)))
+        NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "testFire:", userInfo: randomNumber, repeats: true)
+        //self.testTimer2 = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "testFire2:", userInfo: 5, repeats: true)
+        
+        
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Function: OptionCollectionVC: testFire
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func testFire(timer: NSTimer) -> Void {
+        self.ticks += 1
+        print("Ticks: \(self.ticks)")
+        self.parentViewController?.view.userInteractionEnabled = false
+        //let randomNumber : Int =  Int (arc4random_uniform(UInt32(40)))
+        let randomNumber : Int = timer.userInfo as! Int
+        timer.tolerance = 0.01
+        
+        let collectionView : UICollectionView = self.collectionView!
+        
+        let offsetX    : CGFloat = collectionView.contentOffset.x
+        let offsetY    : CGFloat = collectionView.contentOffset.y
+        var animationX : CGFloat = UIScreen.mainScreen().bounds.width
+        
+//        if self.ticks > (10 + randomNumber ){
+//           animationX *= 0.75
+//        }
+//        
+//        if self.ticks > (15 + randomNumber) {
+//            animationX *= 0.50
+//        }
+//        
+//       if self.ticks > (20 + randomNumber) {
+//            animationX *= 0.25
+//       }
+        if self.ticks > (4 + randomNumber ){
+            animationX *= 0.90
+        }
+        
+        if self.ticks > (8 + randomNumber ){
+            animationX *= 0.80
+        }
+        
+        if self.ticks > (12 + randomNumber ){
+            animationX *= 0.70
+        }
+        
+        if self.ticks > (16 + randomNumber ){
+            animationX *= 0.60
+        }
+        
+        if self.ticks > (20 + randomNumber ){
+            animationX *= 0.50
+        }
+    
+        if self.ticks > (24 + randomNumber ){
+            animationX *= 0.40
+        }
+        
+        let  temp : Int = (24 + randomNumber )
+        if self.ticks > temp {
+            animationX *= 0.30
+        }
+        
+        if self.ticks > (temp + 1) {
+            animationX *= 0.25
+        }
+        
+        if self.ticks > (temp + 2) {
+            animationX *= 0.20
+        }
+        
+        if self.ticks > (temp + 3) {
+            animationX *= 0.10
+        }
+        
+        if self.ticks > (temp + 4) {
+            animationX *= 0.05
+        }
+        
+        if self.ticks > (temp + 10) {
+            self.ticks = 0
+            NSTimer.scheduledTimerWithTimeInterval(0.25, target: self, selector: "testFire2:", userInfo: nil, repeats: false)
+            timer.invalidate()
+        }
+        collectionView.setContentOffset(CGPoint(x: offsetX + animationX, y: offsetY), animated: true)
+        
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Function: OptionCollectionVC: testFire
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    func testFire2(timer: NSTimer) -> Void {
+        let collectionView : UICollectionView = self.collectionView!
+        
+        if var idxArray : [NSIndexPath] = collectionView.indexPathsForVisibleItems() {
+            //Put the Index Paths in order
+            idxArray.sortInPlace( {$0.item < $1.item } )
+            // Select the middle Index Path
+            let i: Int = idxArray.count/2
+            let selectedIndexPath : NSIndexPath = idxArray[i]
+            
+            collectionView.selectItemAtIndexPath(selectedIndexPath,
+                animated       : true,
+                scrollPosition : UICollectionViewScrollPosition.CenteredHorizontally)
+        }
+        
+        self.parentViewController?.view.userInteractionEnabled = true
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -333,33 +449,46 @@ class OptionCollectionVC: UICollectionViewController {
     // Function: OptionCollectionVC: scrollAnimation
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func scrollAnimation(paramTimer: NSTimer) -> Void {
-        let collectionView : UICollectionView = self.collectionView!
-        var counter : Int = paramTimer.userInfo as! Int
-        counter += 1
-        
-        if counter < 20
-        {
-            let offsetX        : CGFloat          = collectionView.contentOffset.x
-            let offsetY        : CGFloat          = collectionView.contentOffset.y
-            collectionView.setContentOffset(CGPoint(x: offsetX + 150.0, y: offsetY), animated: true)
-            
-            NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "scrollAnimation:", userInfo: counter, repeats: false)
-        }
-        else {
-            //Get the visible Index Paths
-            if var idxArray : [NSIndexPath] = collectionView.indexPathsForVisibleItems() {
-                // Put the Index Paths in order
-                idxArray.sortInPlace( {$0.item < $1.item } )
-                // Select the middle Index Path
-                let i:Int = idxArray.count/2
-                let selectedIndexPath:NSIndexPath = idxArray[i]
-                
-                collectionView.selectItemAtIndexPath(selectedIndexPath,
-                    animated       : true,
-                    scrollPosition : UICollectionViewScrollPosition.CenteredHorizontally)
-            }
-        }
+    func scrollAnimation(timer: NSTimer) -> Void {
+//        let collectionView : UICollectionView = self.collectionView!
+        //var counter : Int = timer.userInfo as! Int
+        //self.testCounter = 0
+        self.testTimer.invalidate()
+        self.parentViewController?.view.userInteractionEnabled = true
+//        
+//        if self.counter > 0 {
+//            print("Counter: \(counter)")
+//            self.counter -= 1
+//        }
+//        else
+//        {
+//            timer.invalidate()
+//            
+//        }
+//        counter += 1
+//        
+//        if counter < 20
+//        {
+//            let offsetX        : CGFloat          = collectionView.contentOffset.x
+//            let offsetY        : CGFloat          = collectionView.contentOffset.y
+//            collectionView.setContentOffset(CGPoint(x: offsetX + 150.0, y: offsetY), animated: true)
+//            
+//            NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "scrollAnimation:", userInfo: counter, repeats: false)
+//        }
+//        else {
+//            //Get the visible Index Paths
+//            if var idxArray : [NSIndexPath] = collectionView.indexPathsForVisibleItems() {
+//                // Put the Index Paths in order
+//                idxArray.sortInPlace( {$0.item < $1.item } )
+//                // Select the middle Index Path
+//                let i:Int = idxArray.count/2
+//                let selectedIndexPath:NSIndexPath = idxArray[i]
+//                
+//                collectionView.selectItemAtIndexPath(selectedIndexPath,
+//                    animated       : true,
+//                    scrollPosition : UICollectionViewScrollPosition.CenteredHorizontally)
+//            }
+//        }
     }
     
     /*************************************************************************************************************************************
@@ -370,7 +499,7 @@ class OptionCollectionVC: UICollectionViewController {
     func getRandomIndex() -> NSIndexPath {
         let REAL_ARRAY_ITEM_COUNT = workoutOptionData.count - 8
         let randomItem = Int(arc4random_uniform(UInt32(REAL_ARRAY_ITEM_COUNT))) + 4
-        print("random Item \(randomItem)")
+        //("random Item \(randomItem)")
         return NSIndexPath(forItem: randomItem, inSection: 0)
     }
 }

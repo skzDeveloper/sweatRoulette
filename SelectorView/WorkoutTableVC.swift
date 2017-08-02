@@ -12,6 +12,7 @@ import CoreData
 class WorkoutTableVC: UITableViewController, UIGestureRecognizerDelegate {
     
     var delegate : WorkoutSelectorVCDelegate?
+    var selector : WorkoutSelectorVC!
     var request  : WorkoutRequestVC!
     var workout  : Workout = Workout()
     
